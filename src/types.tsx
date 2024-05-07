@@ -1,4 +1,4 @@
-type PrometheusMetrics = {
+export type PrometheusMetrics = {
   value: string;
   labels: Record<string, string>;
   buckets: Record<string, string>;
@@ -13,10 +13,6 @@ export type PrometheusMetricParser = {
 
 
 export interface MetricsState {
-    dataUnpacked: number
-    dataPacked: number
-    storageAvailable: number
-    hashRate: number | null
-    arweaveSize:number | null
+    weaveSize:number | null
     minerMetrics: PrometheusMetrics[] | undefined
 } 

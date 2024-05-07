@@ -1,4 +1,4 @@
-import { MetricsState, PrometheusMetricParser } from "@/types";
+import { MetricsState, PrometheusMetricParser, PrometheusMetrics } from "@/types";
 //@ts-expect-error
 import parsePrometheusTextFormat from "parse-prometheus-text-format";
 
@@ -12,50 +12,49 @@ const fetchRawMinerMetrics = async() => {
     }
 }
 
+const getMiningRateData = (data:PrometheusMetricParser[]) => {
+    const miningRateData = data.find((item: PrometheusMetricParser) => item.name === "mining_rate");
+    let groupedMiningRateData = {} as {[key:string]: {[key:string]:string}}
+
+    if(miningRateData) {
+        miningRateData.metrics.forEach(item => {
+            let partition = item.labels.partition 
+            if(!groupedMiningRateData.hasOwnProperty(partition)) {
+                groupedMiningRateData[partition] = {}
+            }
+            groupedMiningRateData[partition] = {...groupedMiningRateData[partition],[item.labels.type]: item.value }
+        }) 
+    }
+    return groupedMiningRateData
+}
+
 
 export const fetchMetrics = async():Promise<MetricsState> => {
-    console.log('fetching metrics...')
+
+    let minerMetrics:Array<PrometheusMetrics> = []
+
     const data = await fetchRawMinerMetrics()
     const parsedData:PrometheusMetricParser[] = parsePrometheusTextFormat(data) || []
-    let dataUnpacked = 0;
-    let dataPacked = 0;
-    let storageAvailable = 0;
+
+    const miningRates = getMiningRateData(parsedData)
+
     const dataByPacking = parsedData.find((item: PrometheusMetricParser) => item.name === "v2_index_data_size_by_packing");
-    const minerMetrics = dataByPacking?.metrics
-    if(minerMetrics) {
-        minerMetrics.forEach(item => {
-            if (item.labels.packing == "unpacked") {
-                dataUnpacked += +item.value;
-            } else {
-                dataPacked += +item.value;
+    if(dataByPacking) {
+        dataByPacking.metrics.forEach(item => {
+            //this check will filter out unpacked data 
+            if (item.labels.packing !== "unpacked") {
+                const miningRatesForPartition = miningRates[item.labels.partition_number]
+                item.labels = {...item.labels, ...miningRatesForPartition}
+                minerMetrics.push(item)
             }
-            const partitionSize = Number(item.labels.storage_module_size)
-            if (isFinite(partitionSize)) {
-                storageAvailable += partitionSize;
-            } 
         })
     }
-    let hashRate = null
 
-    const weaveSize = parsedData.find((item:PrometheusMetricParser) => item.name === "weave_size")
-    const arweaveSize = Number(weaveSize?.metrics[0].value)  
-
-    const miningRateData = parsedData.find((item: PrometheusMetricParser) => item.name === "mining_rate");
-    /*if(miningRateData) {
-        miningRateData.metrics.forEach(item => {
-            console.log(item.labels)
-            /*if (item.labels.packing == "unpacked") {
-                dataUnpacked += +item.value;
-            } else {
-                dataPacked += +item.value;
-            }
-            const partitionSize = Number(item.labels.storage_module_size)
-            if (isFinite(partitionSize)) {
-                storageAvailable += partitionSize;
-            } * /
-        })
-    }*/
+    const weaveSizeMetric = parsedData.find((item:PrometheusMetricParser) => item.name === "weave_size")
+    const weaveSize = Number(weaveSizeMetric?.metrics[0].value)  
     console.log('Done fetching metrics ✨')
 
-    return {dataUnpacked, dataPacked, storageAvailable, hashRate, arweaveSize, minerMetrics }
+    minerMetrics = minerMetrics.sort((a,b) => parseInt(a.labels.partition_number) - parseInt(b.labels.partition_number))
+
+    return { weaveSize, minerMetrics }
 }
