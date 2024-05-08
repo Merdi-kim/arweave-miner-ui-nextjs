@@ -1,1 +1,1 @@
-# Arweave Miner UI 
+# Arweave Miner UI

@@ -1,1 +1,1 @@
-export { fetchMetrics } from './fetchMetrics'
+export { fetchMetrics } from "./fetchMetrics";
