@@ -7,13 +7,13 @@ const Dashboard = async () => {
 
   return (
     <div className="h-full w-full p-4">
-      <div className="flex flex-col items-center">
-        <h2 className="mb-10">Miner Output</h2>
       <div className="w-full flex flex-col items-center">
-        {minerMetrics?.map((metric, index) => (
-          <MetricsCard key={index} metrics={metric} />
-        ))}
-      </div>
+        <h2 className="mb-10">Miner Output</h2>
+        <div className="w-full flex flex-col items-center">
+          {minerMetrics?.map((metric, index) => (
+            <MetricsCard key={index} metrics={metric} />
+          ))}
+        </div>
       </div>
     </div>
   );
