@@ -4,7 +4,7 @@ import { PrometheusMetrics } from "@/types";
 import MetricsWithChart from "../modals/MetricsWithChart";
 import { useState } from "react";
 
-const MetricsCard = ({ metrics }: { metrics: PrometheusMetrics }) => {
+const MetricsCard = ({ metric }: { metric: PrometheusMetrics }) => {
   const ONE_TERABYTE = 1000000000000;
   const MODULE_MAX_SIZE = 3600000000000;
 
@@ -20,20 +20,20 @@ const MetricsCard = ({ metrics }: { metrics: PrometheusMetrics }) => {
           <div>
             Partition{" "}
             <span className="font-semibold">
-              {metrics.labels.partition_number}
+              {metric.labels.partition_number}
             </span>
           </div>
           <div className="flex flex-col items-center">
             <span>Data Size</span>
             <span className="font-semibold">
-              {Number(metrics.labels.storage_module_size) / ONE_TERABYTE} TB
+              {Number(metric.labels.storage_module_size) / ONE_TERABYTE} TB
             </span>
           </div>
           <div className="flex flex-col items-center">
             <span>% of Max</span>
             <span className="font-semibold">
               {(
-                (Number(metrics.labels.storage_module_size) / MODULE_MAX_SIZE) *
+                (Number(metric.labels.storage_module_size) / MODULE_MAX_SIZE) *
                 100
               ).toFixed(2)}{" "}
               %
@@ -48,19 +48,19 @@ const MetricsCard = ({ metrics }: { metrics: PrometheusMetrics }) => {
               <div>
                 Current:{" "}
                 <span className="font-semibold">
-                  {Number(metrics.labels.read).toFixed(1)} MiB/s
+                  {Number(metric.labels.read).toFixed(1)} MiB/s
                 </span>
               </div>
-              <div>
+              {/*<div>
                 Average:{" "}
                 <span className="font-semibold">
-                  {Number(metrics.labels.read).toFixed(1)} MiB/s
+                  {Number(metric.labels.read).toFixed(1)} MiB/s
                 </span>
-              </div>
+            </div>*/}
               <div>
                 Ideal:{" "}
                 <span className="font-semibold">
-                  {Number(metrics.labels.ideal_read).toFixed(1)} MiB/s
+                  {Number(metric.labels.ideal_read).toFixed(1)} MiB/s
                 </span>
               </div>
             </div>
@@ -71,19 +71,19 @@ const MetricsCard = ({ metrics }: { metrics: PrometheusMetrics }) => {
               <div>
                 Current:{" "}
                 <span className="font-semibold">
-                  {Number(metrics.labels.hash).toFixed(1)} h/s
+                  {Number(metric.labels.hash).toFixed(1)} h/s
                 </span>
               </div>
-              <div>
+              {/*<div>
                 Average:{" "}
                 <span className="font-semibold">
-                  {Number(metrics.labels.hash).toFixed(1)} h/s
+                  {Number(metric.labels.hash).toFixed(1)} h/s
                 </span>
-              </div>
+            </div>*/}
               <div>
                 Ideal:{" "}
                 <span className="font-semibold">
-                  {Number(metrics.labels.ideal_hash).toFixed(1)} h/s
+                  {Number(metric.labels.ideal_hash).toFixed(1)} h/s
                 </span>
               </div>
             </div>
@@ -93,7 +93,7 @@ const MetricsCard = ({ metrics }: { metrics: PrometheusMetrics }) => {
 
       {showMetricsWithChart && (
         <MetricsWithChart
-          metrics={metrics}
+          metric={metric}
           HandleCloseModal={setShowMetricsWithChart}
         />
       )}

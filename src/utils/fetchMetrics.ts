@@ -8,7 +8,7 @@ import parsePrometheusTextFormat from "parse-prometheus-text-format";
 
 const fetchRawMinerMetrics = async () => {
   try {
-    const res = await fetch("http://s1.ddns.me:1984/metrics");
+    const res = await fetch("http://s1.ddns.me:1985/metrics");
     const data = await res.text();
     return data;
   } catch (err) {
@@ -46,7 +46,7 @@ export const fetchMetrics = async (): Promise<MetricsState> => {
   const parsedData: PrometheusMetricParser[] =
     parsePrometheusTextFormat(data) || [];
 
-  const miningRates = getMiningRateData(parsedData);
+  const minerRates = getMiningRateData(parsedData);
 
   const dataByPacking = parsedData.find(
     (item: PrometheusMetricParser) =>
@@ -57,7 +57,7 @@ export const fetchMetrics = async (): Promise<MetricsState> => {
       //this check will filter out unpacked data
       if (item.labels.packing !== "unpacked") {
         const miningRatesForPartition =
-          miningRates[item.labels.partition_number];
+          minerRates[item.labels.partition_number];
         item.labels = { ...item.labels, ...miningRatesForPartition };
         minerMetrics.push(item);
       }
@@ -75,5 +75,5 @@ export const fetchMetrics = async (): Promise<MetricsState> => {
       parseInt(a.labels.partition_number) - parseInt(b.labels.partition_number),
   );
 
-  return { weaveSize, minerMetrics };
+  return { minerRates, weaveSize, minerMetrics };
 };

@@ -9,14 +9,17 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@tanstack/react-query": "^5.35.1",
     "chart.js": "^4.4.2",
     "next": "14.2.3",
     "parse-prometheus-text-format": "^1.1.1",
     "react": "^18",
     "react-chartjs-2": "^5.2.0",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "recoil": "^0.7.7"
   },
   "devDependencies": {
+    "@tanstack/eslint-plugin-query": "^5.32.1",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",

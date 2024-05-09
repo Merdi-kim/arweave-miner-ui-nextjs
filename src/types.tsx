@@ -12,6 +12,7 @@ export type PrometheusMetricParser = {
 };
 
 export interface MetricsState {
+  minerRates: { [key: string]: { [key: string]: string; }; },
   weaveSize: number | null;
   minerMetrics: PrometheusMetrics[] | undefined;
 }
