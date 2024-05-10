@@ -9,7 +9,7 @@ import { PrometheusMetrics } from "@/types";
 const Dashboard = () => {
   const [ metricsData, setMetricsData ] = useState<Array<PrometheusMetrics> | undefined>([])
   const setMinerMetrics = useSetRecoilState(metrics)
-  let minerRatesOverTime:Array<Object> = []
+  let minerRatesOverTime:Array<{time:string, data:any}> = []
 
   useEffect(() => {
     const getData = async() => {
