@@ -55,13 +55,13 @@ const MetricsWithChart = ({metric, HandleCloseModal}: MetricsWithChartProps) => 
 
   return (
     <div className="fixed inset-0 bg-gray-600/50 overflow-y-auto w-full">
-      <div className="relative top-5 mx-auto p-7 border shadow-lg rounded-md bg-white w-11/12 md:w-[750px]">
+      <div className="relative top-5 2xl:top-20 mx-auto p-7 border shadow-lg rounded-md bg-white w-11/12 md:w-[750px]">
         <h2 className="mb-5 text-center font-bold text-base sm:text-2xl">
           Read and Hash Rate Data
         </h2>
-        <div className="flex flex-col items-center">
-          <div>Average Read Rate: {avgRrate} MiB/s</div>
-          <div>Average Hash Rate: {avgHrate} h/s</div>
+        <div className="flex flex-col text-sm sm:text-base items-center font-extralight">
+            <div>Average Read Rate: <span className="font-bold">{avgRrate}</span> MiB/s</div>
+            <div>Average Hash Rate: <span className="font-bold">{avgHrate}</span> h/s</div>
         </div>
         {/*<div className="flex justify-between items-start mt-6">
           <div className="text-xs sm:text-sm">
@@ -113,14 +113,14 @@ const MetricsWithChart = ({metric, HandleCloseModal}: MetricsWithChartProps) => 
   </div>*/}
 
         <div className="py-5 my-5 flex flex-col items-center">
-          <div className="h-60">
+          <div className="">
             <h4>Read Rate</h4>
-            <Line data={readData}/>
+            <Line className="h-[150px] sm:h-[200px]" data={readData}/>
           </div>
 
-          <div className="h-60 mt-10">
+          <div className="mt-10">
             <h4>Hash Rate</h4>
-              <Line data={hashData}/>
+            <Line className="h-[150px] sm:h-[200px]" data={hashData}/>
           </div>
           </div>
 

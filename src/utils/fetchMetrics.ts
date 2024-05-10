@@ -41,6 +41,11 @@ const getMiningRateData = (data: PrometheusMetricParser[]) => {
 
 export const fetchMetrics = async (): Promise<MetricsState> => {
   let minerMetrics: Array<PrometheusMetrics> = [];
+  let totalStorageSize:number = 0
+  let totalReadRate:number = 0
+  let totalIdealReadRate:number = 0
+  let totalHashRate:number = 0
+  let totalIdealHashRate:number = 0
 
   const data = await fetchRawMinerMetrics();
   const parsedData: PrometheusMetricParser[] =
@@ -60,6 +65,12 @@ export const fetchMetrics = async (): Promise<MetricsState> => {
           minerRates[item.labels.partition_number];
         item.labels = { ...item.labels, ...miningRatesForPartition };
         minerMetrics.push(item);
+        //console.log(item)
+        totalStorageSize += Number(item.labels.storage_module_size)
+        totalReadRate += Number(item.labels.read)
+        totalIdealReadRate += Number(item.labels.ideal_read)
+        totalHashRate += Number(item.labels.hash)
+        totalIdealHashRate += Number(item.labels.ideal_hash)
       }
     });
   }
@@ -75,5 +86,5 @@ export const fetchMetrics = async (): Promise<MetricsState> => {
       parseInt(a.labels.partition_number) - parseInt(b.labels.partition_number),
   );
 
-  return { minerRates, weaveSize, minerMetrics };
+  return { totalStorageSize, totalReadRate, totalIdealReadRate, totalHashRate, totalIdealHashRate, minerRates, weaveSize, minerMetrics };
 };
