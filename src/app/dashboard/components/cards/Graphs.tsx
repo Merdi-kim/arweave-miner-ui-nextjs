@@ -15,7 +15,7 @@ Chart.register(PointElement);
 Chart.register(LineElement);
 
 interface GraphsProps {
-  metric: PrometheusMetrics;
+  metric?: PrometheusMetrics;
 }
 
 const Graphs = ({ metric }: GraphsProps) => {
@@ -41,15 +41,24 @@ const Graphs = ({ metric }: GraphsProps) => {
   //format metrics into a format that chart.js uses for data display
   metricsData.forEach((item) => {
     readRate.labels.push(item.time);
-    readRate.data.push(item.data[metric.labels.partition_number].read);
-    idealReadRate.data.push(
-      item.data[metric.labels.partition_number].ideal_read,
-    );
     hashRate.labels.push(item.time);
-    hashRate.data.push(item.data[metric.labels.partition_number].hash);
-    idealHashRate.data.push(
+    if(metric?.labels.partition_number) {
+      readRate.data.push(item.data[metric.labels.partition_number].read);
+      idealReadRate.data.push(item.data[metric.labels.partition_number].ideal_read)
+      hashRate.data.push(item.data[metric.labels.partition_number].hash);
+      idealHashRate.data.push(
       item.data[metric.labels.partition_number].ideal_hash,
     );
+    } else {
+      readRate.data.push(item.data.total.totalReadRate);
+      idealReadRate.data.push(
+        item.data.total.totalIdealReadRate,
+      );
+      hashRate.data.push(item.data.total.totalHashRate);
+      idealHashRate.data.push(
+        item.data.total.totalIdealHashRate,
+      );
+    }
   });
 
   const avgReadRate = Number(

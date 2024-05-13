@@ -37,7 +37,7 @@ const Dashboard = () => {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          url: `${storedMinerInfo.protocol}://${storedMinerInfo.hostname}/metrics`,
+          url: `${storedMinerInfo.protocol}://${storedMinerInfo.hostname}:${storedMinerInfo.port}/metrics`,
         }),
       });
       const {
@@ -54,7 +54,7 @@ const Dashboard = () => {
       const currentDate = new Date();
       const minerRateWithTimeStamp = {
         time: `${currentDate.getHours()} : ${currentDate.getMinutes()}`,
-        data: minerRates,
+        data: {...minerRates, total:{totalHashRate, totalIdealHashRate, totalIdealReadRate, totalReadRate}},
       };
       minerRatesOverTime = [...minerRatesOverTime, minerRateWithTimeStamp];
       setMinerMetrics(minerRatesOverTime);
@@ -75,8 +75,6 @@ const Dashboard = () => {
     getData();
     setInterval(() => getData(), 30000);
   }, []);
-
-  console.log(!!minerInfo?.hostname);
 
   return (
     <div>
@@ -117,4 +115,3 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
-

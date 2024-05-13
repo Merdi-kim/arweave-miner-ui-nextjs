@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 //import type { Metadata } from "next";
 import { Roboto_Mono } from "next/font/google";
@@ -21,8 +21,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body suppressHydrationWarning className={roboto.className}>
-        <Navbar/>
-      <RecoilRoot>{children}</RecoilRoot>
+        <Navbar />
+        <RecoilRoot>{children}</RecoilRoot>
       </body>
     </html>
   );

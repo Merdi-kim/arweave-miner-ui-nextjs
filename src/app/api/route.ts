@@ -2,7 +2,7 @@ import { fetchMetrics } from "@/utils";
 import { NextResponse, NextRequest } from "next/server";
 
 export async function POST(req: NextRequest) {
-  console.log(req.body);
+  const { url } = await req.json();
 
   const {
     totalStorageSize,
@@ -14,7 +14,7 @@ export async function POST(req: NextRequest) {
     weaveSize,
     minerMetrics,
     coordinatedMiningData,
-  } = await fetchMetrics();
+  } = await fetchMetrics(url);
   return NextResponse.json({
     totalStorageSize,
     totalReadRate,

@@ -53,18 +53,19 @@ const MetricsCard = ({ metric }: { metric: PrometheusMetrics }) => {
                 {Number(metric.labels.read).toFixed(1)} MiB/s
               </span>
             </div>
-            {/*<div>
-                Average:{" "}
-                <span className="font-semibold">
-                  {Number(metric.labels.read).toFixed(1)} MiB/s
-                </span>
-            </div>*/}
             <div>
               Ideal:{" "}
               <span className="font-semibold">
                 {Number(metric.labels.ideal_read).toFixed(1)} MiB/s
               </span>
             </div>
+            <div>
+                % of Ideal:{" "}
+                <span className="font-semibold">
+                  {Number((Number(metric.labels.read)/Number(metric.labels.ideal_read))* 100).toFixed(1)} %
+                </span>
+            </div>
+            
           </div>
         </div>
         <div>
@@ -76,18 +77,19 @@ const MetricsCard = ({ metric }: { metric: PrometheusMetrics }) => {
                 {Number(metric.labels.hash).toFixed(1)} h/s
               </span>
             </div>
-            {/*<div>
-                Average:{" "}
-                <span className="font-semibold">
-                  {Number(metric.labels.hash).toFixed(1)} h/s
-                </span>
-            </div>*/}
             <div>
               Ideal:{" "}
               <span className="font-semibold">
                 {Number(metric.labels.ideal_hash).toFixed(1)} h/s
               </span>
             </div>
+            <div>
+                % of Ideal:{" "}
+                <span className="font-semibold">
+                  {Number((Number(metric.labels.hash)/Number(metric.labels.ideal_hash))* 100).toFixed(1)} %
+                </span>
+            </div>
+            
           </div>
         </div>
       </div>
