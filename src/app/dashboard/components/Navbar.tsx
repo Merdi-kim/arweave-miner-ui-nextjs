@@ -1,7 +1,8 @@
 "use client";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AddMinerModal } from "./modals/AddMiner";
+import { MinerInfo } from "@/types";
 
 interface NavLink {
   href: string;
@@ -10,8 +11,12 @@ interface NavLink {
 
 export default function Navbar() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const localStorageData = localStorage.getItem("minerInfo");
-  const minerInfo = JSON.parse(localStorageData!);
+  const [minerInfo, setMinerInfo] = useState<MinerInfo>()
+
+  useEffect(() => {
+    const localStorageData = localStorage.getItem("minerInfo");
+    setMinerInfo(JSON.parse(localStorageData!))
+  }, [])
 
   return (
     <header className="w-full">

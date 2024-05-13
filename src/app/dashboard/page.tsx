@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import MinerDashboard from "./components/Miner";
 import CoordinatedMiningDashBoard from "./components/CoordinatedMining";
-import { PrometheusMetrics, TotalMetrics } from "@/types";
+import { MinerInfo, PrometheusMetrics, TotalMetrics } from "@/types";
 import { useSetRecoilState } from "recoil";
 import { coordinatedMiningMetrics, metrics } from "@/store";
 import MinerDashboardLoading from "./components/Loadings/MinerDashboard";
@@ -26,16 +26,18 @@ const Dashboard = () => {
   );
   let minerRatesOverTime: Array<{ time: string; data: any }> = [];
 
-  const localStorageData = localStorage.getItem("minerInfo");
-  const minerInfo = JSON.parse(localStorageData!);
+  const [minerInfo, setMinerInfo] = useState<MinerInfo>()
 
   useEffect(() => {
+    const localStorageData = localStorage.getItem("minerInfo");
+    const storedMinerInfo = JSON.parse(localStorageData!)
+    setMinerInfo(storedMinerInfo)
     const getData = async () => {
       const data = await fetch("/api", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          url: `${minerInfo.protocol}://${minerInfo.hostname}/metrics`,
+          url: `${storedMinerInfo.protocol}://${storedMinerInfo.hostname}/metrics`,
         }),
       });
       const {
@@ -68,7 +70,7 @@ const Dashboard = () => {
       setIsLoading(false);
     };
 
-    if (!minerInfo?.hostname) return;
+    if (!storedMinerInfo?.hostname) return;
 
     getData();
     setInterval(() => getData(), 30000);
@@ -76,7 +78,7 @@ const Dashboard = () => {
 
   return (
     <div>
-      {minerInfo?.hostname ? (
+      {minerInfo?.hostname && !isLoading ? (
         <div>
           {!isLoading ? (
             <div>
