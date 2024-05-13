@@ -10,7 +10,8 @@ interface NavLink {
 
 export default function Navbar() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const minerInfo = JSON.parse(localStorage.getItem("minerInfo"));
+  const localStorageData = localStorage.getItem("minerInfo");
+  const minerInfo = JSON.parse(localStorageData!);
 
   return (
     <header className="w-full">
@@ -24,15 +25,26 @@ export default function Navbar() {
             />
           </Link>
 
-          {!minerInfo?.hostname ? <button
-            onClick={() => setIsModalOpen((prevState) => !prevState)}
-            disabled={!minerInfo?.hostname}
-            className="flex items-center gap-2 border border-gray-950 rounded-md px-4 py-2 font-normal outline-none text-gray-950 hover:bg-gray-150 disabled:cursor-not-allowed"
-          >
-            <img src="/assets/wallet.svg" />
-            <span>Add Miner</span>
-          </button>: <button onClick={() => setIsModalOpen(true)} className="hover:bg-gray-200 px-4 py-2 rounded-md text-sm sm:text-base">{`${minerInfo?.hostname}:${minerInfo?.port}`}</button>}
-          {isModalOpen && <div className="fixed inset-0 pt-40  bg-gray-600/50 overflow-y-auto w-full"><AddMinerModal HandleCloseModal={setIsModalOpen} /></div>}
+          {!minerInfo?.hostname ? (
+            <button
+              onClick={() => setIsModalOpen((prevState) => !prevState)}
+              disabled={!minerInfo?.hostname}
+              className="flex items-center gap-2 border border-gray-950 rounded-md px-4 py-2 font-normal outline-none text-gray-950 hover:bg-gray-150 disabled:cursor-not-allowed"
+            >
+              <img src="/assets/wallet.svg" />
+              <span>Add Miner</span>
+            </button>
+          ) : (
+            <button
+              onClick={() => setIsModalOpen(true)}
+              className="hover:bg-gray-200 px-4 py-2 rounded-md text-sm sm:text-base"
+            >{`${minerInfo?.hostname}:${minerInfo?.port}`}</button>
+          )}
+          {isModalOpen && (
+            <div className="fixed inset-0 pt-40  bg-gray-600/50 overflow-y-auto w-full">
+              <AddMinerModal HandleCloseModal={setIsModalOpen} />
+            </div>
+          )}
         </div>
       </nav>
     </header>

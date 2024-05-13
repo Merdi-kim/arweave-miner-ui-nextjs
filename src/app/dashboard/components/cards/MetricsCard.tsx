@@ -25,7 +25,10 @@ const MetricsCard = ({ metric }: { metric: PrometheusMetrics }) => {
         <div className="flex flex-col items-center">
           <span>Data Size</span>
           <span className="font-semibold">
-            {Number(Number(metric.labels.storage_module_size) / ONE_TERABYTE).toFixed(1)} TB
+            {Number(
+              Number(metric.labels.storage_module_size) / ONE_TERABYTE,
+            ).toFixed(1)}{" "}
+            TB
           </span>
         </div>
         <div className="flex flex-col items-center">

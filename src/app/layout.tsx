@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Roboto_Mono } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/app/dashboard/components/Navbar";
 
 const roboto = Roboto_Mono({ subsets: ["latin"] });
 

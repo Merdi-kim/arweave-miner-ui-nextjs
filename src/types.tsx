@@ -26,7 +26,6 @@ export interface TotalMetrics {
 }
 
 export interface MetricsState extends TotalMetrics {
-  
   minerRates: { [key: string]: { [key: string]: string } };
   weaveSize: number | null;
   minerMetrics: PrometheusMetrics[] | undefined;

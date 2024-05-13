@@ -12,7 +12,7 @@ const CoordinatedMiningDashBoard = () => {
   return (
     <div className="w-full">
       <div className="w-full flex flex-col items-center font-light text-xs sm:text-sm px-2">
-        {Object.keys(coordinatedMiningMetricsValue).map((key) =>
+        {Object.keys(coordinatedMiningMetricsValue).map((key: string) =>
           key == "total" ? (
             <div
               key={key}
@@ -25,6 +25,7 @@ const CoordinatedMiningDashBoard = () => {
                 <div>
                   Out Batch:{" "}
                   <span className="font-semibold">
+                    {/* @ts-ignore */}
                     {Number(coordinatedMiningMetricsValue[key].h1.from).toFixed(
                       1,
                     )}{" "}
@@ -34,6 +35,7 @@ const CoordinatedMiningDashBoard = () => {
                 <div>
                   In Batch:{" "}
                   <span className="font-semibold">
+                    {/* @ts-ignore */}
                     {Number(coordinatedMiningMetricsValue[key].h1.to).toFixed(
                       1,
                     )}{" "}
@@ -56,6 +58,7 @@ const CoordinatedMiningDashBoard = () => {
                     H1 Out:{" "}
                     <span className="font-semibold">
                       {Number(
+                        /*@ts-ignore*/
                         coordinatedMiningMetricsValue[key].h1.from,
                       ).toFixed(1)}{" "}
                       h/s
@@ -64,9 +67,10 @@ const CoordinatedMiningDashBoard = () => {
                   <div>
                     H1 In:{" "}
                     <span className="font-semibold">
-                      {Number(coordinatedMiningMetricsValue[key].h1.to).toFixed(
-                        1,
-                      )}{" "}
+                      {Number(
+                        /*@ts-ignore*/
+                        coordinatedMiningMetricsValue[key].h1.to,
+                      ).toFixed(1)}{" "}
                       h/s
                     </span>
                   </div>
@@ -76,6 +80,7 @@ const CoordinatedMiningDashBoard = () => {
                     H2 Out:{" "}
                     <span className="font-semibold">
                       {Number(
+                        //@ts-ignore
                         coordinatedMiningMetricsValue[key].h2.from,
                       ).toFixed(1)}{" "}
                       h/s
@@ -84,9 +89,10 @@ const CoordinatedMiningDashBoard = () => {
                   <div>
                     H2 In:{" "}
                     <span className="font-semibold">
-                      {Number(coordinatedMiningMetricsValue[key].h2.to).toFixed(
-                        1,
-                      )}{" "}
+                      {Number(
+                        //@ts-ignore
+                        coordinatedMiningMetricsValue[key].h2.to,
+                      ).toFixed(1)}{" "}
                       h/s
                     </span>
                   </div>

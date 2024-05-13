@@ -26,7 +26,8 @@ const Dashboard = () => {
   );
   let minerRatesOverTime: Array<{ time: string; data: any }> = [];
 
-  const minerInfo = JSON.parse(localStorage.getItem("minerInfo"));
+  const localStorageData = localStorage.getItem("minerInfo");
+  const minerInfo = JSON.parse(localStorageData!);
 
   useEffect(() => {
     const getData = async () => {
@@ -75,35 +76,43 @@ const Dashboard = () => {
 
   return (
     <div>
-      {minerInfo?.hostname ? <div>
-      {!isLoading ? <div>
-        <div className="w-full flex justify-center items-center h-20 p-4 md:p-0 mt-4 rounded-lg md:flex-row md:space-x-2 md:mt-0">
-          <button
-            onClick={() => setisMinerDashBoard(true)}
-            className={`block px-5 py-2 rounded hover:bg-gray-200 ${isMinerDashBoard ? "font-medium bg-gray-200" : "font-light"}`}
-          >
-            Miner
-          </button>
-          <button
-            onClick={() => setisMinerDashBoard(false)}
-            className={`block px-5 py-2 rounded hover:bg-gray-200 ${!isMinerDashBoard ? "font-medium bg-gray-200" : "font-light"}`}
-          >
-            Peers
-          </button>
-        </div>
-
+      {minerInfo?.hostname ? (
         <div>
-          {isMinerDashBoard ? (
-            <MinerDashboard
-              metricsData={metricsData}
-              totalMetrics={totalMetrics}
-            />
+          {!isLoading ? (
+            <div>
+              <div className="w-full flex justify-center items-center h-20 p-4 md:p-0 mt-4 rounded-lg md:flex-row md:space-x-2 md:mt-0">
+                <button
+                  onClick={() => setisMinerDashBoard(true)}
+                  className={`block px-5 py-2 rounded hover:bg-gray-200 ${isMinerDashBoard ? "font-medium bg-gray-200" : "font-light"}`}
+                >
+                  Miner
+                </button>
+                <button
+                  onClick={() => setisMinerDashBoard(false)}
+                  className={`block px-5 py-2 rounded hover:bg-gray-200 ${!isMinerDashBoard ? "font-medium bg-gray-200" : "font-light"}`}
+                >
+                  Peers
+                </button>
+              </div>
+
+              <div>
+                {isMinerDashBoard ? (
+                  <MinerDashboard
+                    metricsData={metricsData}
+                    totalMetrics={totalMetrics}
+                  />
+                ) : (
+                  <CoordinatedMiningDashBoard />
+                )}
+              </div>
+            </div>
           ) : (
-            <CoordinatedMiningDashBoard />
+            <MinerDashboardLoading />
           )}
         </div>
-      </div>: <MinerDashboardLoading/>}
-      </div>: <NoMiner/>}
+      ) : (
+        <NoMiner />
+      )}
     </div>
   );
 };
