@@ -6,9 +6,11 @@ import {
 //@ts-expect-error
 import parsePrometheusTextFormat from "parse-prometheus-text-format";
 
-const fetchRawMinerMetrics = async () => {
+const fetchRawMinerMetrics = async (
+  address: string = "http://testnet-2.arweave.net:1984/metrics",
+) => {
   try {
-    const res = await fetch("http://s1.ddns.me:1985/metrics");
+    const res = await fetch(address);
     const data = await res.text();
     return data;
   } catch (err) {
@@ -39,13 +41,51 @@ const getMiningRateData = (data: PrometheusMetricParser[]) => {
   return groupedMiningRateData;
 };
 
+const getCoordinatedMiningData = (data: PrometheusMetricParser[]) => {
+  const resultH1 = data.find(
+    (item: PrometheusMetricParser) => item.name === "cm_h1_rate",
+  );
+
+  const resultH2 = data.find(
+    (item: PrometheusMetricParser) => item.name === "cm_h2_count",
+  );
+
+  let coordinatedMiningData: { [key: string]: { [key: string]: any } } = {};
+
+  resultH1?.metrics.forEach((metric) => {
+    if (!coordinatedMiningData[metric.labels.peer]) {
+      coordinatedMiningData[metric.labels.peer] = {};
+    }
+    coordinatedMiningData[metric.labels.peer] = {
+      h1: {
+        from: metric.labels.direction == "from" ? metric.value : "0.0",
+        to: metric.labels.direction == "to" ? metric.value : "0.0",
+      },
+    };
+  });
+
+  resultH2?.metrics.forEach((metric) => {
+    if (!coordinatedMiningData[metric.labels.peer]) {
+      coordinatedMiningData[metric.labels.peer] = {};
+    }
+    coordinatedMiningData[metric.labels.peer] = {
+      ...coordinatedMiningData[metric.labels.peer],
+      h2: {
+        from: metric.labels.direction == "from" ? metric.value : "0.0",
+        to: metric.labels.direction == "to" ? metric.value : "0.0",
+      },
+    };
+  });
+  return coordinatedMiningData;
+};
+
 export const fetchMetrics = async (): Promise<MetricsState> => {
   let minerMetrics: Array<PrometheusMetrics> = [];
-  let totalStorageSize:number = 0
-  let totalReadRate:number = 0
-  let totalIdealReadRate:number = 0
-  let totalHashRate:number = 0
-  let totalIdealHashRate:number = 0
+  let totalStorageSize: number = 0;
+  let totalReadRate: number = 0;
+  let totalIdealReadRate: number = 0;
+  let totalHashRate: number = 0;
+  let totalIdealHashRate: number = 0;
 
   const data = await fetchRawMinerMetrics();
   const parsedData: PrometheusMetricParser[] =
@@ -66,14 +106,16 @@ export const fetchMetrics = async (): Promise<MetricsState> => {
         item.labels = { ...item.labels, ...miningRatesForPartition };
         minerMetrics.push(item);
         //console.log(item)
-        totalStorageSize += Number(item.labels.storage_module_size)
-        totalReadRate += Number(item.labels.read)
-        totalIdealReadRate += Number(item.labels.ideal_read)
-        totalHashRate += Number(item.labels.hash)
-        totalIdealHashRate += Number(item.labels.ideal_hash)
+        totalStorageSize += Number(item.labels.storage_module_size);
+        totalReadRate += Number(item.labels.read);
+        totalIdealReadRate += Number(item.labels.ideal_read);
+        totalHashRate += Number(item.labels.hash);
+        totalIdealHashRate += Number(item.labels.ideal_hash);
       }
     });
   }
+
+  const coordinatedMiningData = getCoordinatedMiningData(parsedData);
 
   const weaveSizeMetric = parsedData.find(
     (item: PrometheusMetricParser) => item.name === "weave_size",
@@ -86,5 +128,15 @@ export const fetchMetrics = async (): Promise<MetricsState> => {
       parseInt(a.labels.partition_number) - parseInt(b.labels.partition_number),
   );
 
-  return { totalStorageSize, totalReadRate, totalIdealReadRate, totalHashRate, totalIdealHashRate, minerRates, weaveSize, minerMetrics };
+  return {
+    totalStorageSize,
+    totalReadRate,
+    totalIdealReadRate,
+    totalHashRate,
+    totalIdealHashRate,
+    minerRates,
+    weaveSize,
+    minerMetrics,
+    coordinatedMiningData,
+  };
 };

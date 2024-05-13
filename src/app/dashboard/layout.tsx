@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import { RecoilRoot } from "recoil";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -9,15 +9,15 @@ export default function DashboardLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-
-  const queryClient = new QueryClient()
+  const queryClient = new QueryClient();
 
   return (
     <div>
       <Navbar />
       <div>
-        <QueryClientProvider client={queryClient}><RecoilRoot>{children}</RecoilRoot></QueryClientProvider>
-        
+        <QueryClientProvider client={queryClient}>
+          <RecoilRoot>{children}</RecoilRoot>
+        </QueryClientProvider>
       </div>
     </div>
   );

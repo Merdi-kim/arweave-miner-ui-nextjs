@@ -1,6 +1,5 @@
 "use client";
 import Link from "next/link";
-import { useRouter, usePathname } from "next/navigation";
 import { useState } from "react";
 import { AddMinerModal } from "./modals/AddMiner";
 
@@ -10,37 +9,13 @@ interface NavLink {
 }
 
 export default function Navbar() {
-  const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const links: NavLink[] = [
-    {
-      href: "/",
-      label: "Home",
-    },
-    {
-      href: "/dashboard",
-      label: "Dashboard",
-    },
-  ];
-
-  const NavLink = ({ href, label }: NavLink) => {
-    return (
-      <Link
-        href={href}
-        className={`block px-5 py-2 rounded hover:bg-gray-200 ${
-          usePathname() == href ? "font-medium bg-gray-200" : "font-light"
-        }`}
-      >
-        {label}
-      </Link>
-    );
-  };
+  const minerInfo = JSON.parse(localStorage.getItem("minerInfo"));
 
   return (
     <header className="w-full">
       <nav className="w-full h-[5rem] top-0 left-0 z-20 border-b border-gray-300 bg-[#F1F1F1]">
-        <div className="flex whitespace-nowrap items-center justify-between p-4 px-10">
+        <div className="flex whitespace-nowrap items-center justify-between p-4 sm:px-10">
           <Link href="/" className="flex items-center">
             <img
               src="/assets/logo.svg"
@@ -49,25 +24,15 @@ export default function Navbar() {
             />
           </Link>
 
-          <div className="items-center justify-between hidden w-full md:flex md:w-auto">
-            <ul className="flex flex-col p-4 md:p-0 mt-4 rounded-lg md:flex-row md:space-x-2 md:mt-0">
-              {links.map((link, index) => {
-                return (
-                  <NavLink key={index} href={link.href} label={link.label} />
-                );
-              })}
-            </ul>
-          </div>
-
-          <button
+          {!minerInfo?.hostname ? <button
             onClick={() => setIsModalOpen((prevState) => !prevState)}
-            disabled={isModalOpen}
+            disabled={!minerInfo?.hostname}
             className="flex items-center gap-2 border border-gray-950 rounded-md px-4 py-2 font-normal outline-none text-gray-950 hover:bg-gray-150 disabled:cursor-not-allowed"
           >
             <img src="/assets/wallet.svg" />
             <span>Add Miner</span>
-          </button>
-          {isModalOpen && <AddMinerModal HandleCloseModal={setIsModalOpen} />}
+          </button>: <button onClick={() => setIsModalOpen(true)} className="hover:bg-gray-200 px-4 py-2 rounded-md text-sm sm:text-base">{`${minerInfo?.hostname}:${minerInfo?.port}`}</button>}
+          {isModalOpen && <div className="fixed inset-0 pt-40  bg-gray-600/50 overflow-y-auto w-full"><AddMinerModal HandleCloseModal={setIsModalOpen} /></div>}
         </div>
       </nav>
     </header>

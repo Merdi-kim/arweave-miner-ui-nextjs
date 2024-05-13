@@ -11,13 +11,24 @@ export type PrometheusMetricParser = {
   metrics: PrometheusMetrics[];
 };
 
-export interface MetricsState {
-  totalStorageSize:number
-  totalReadRate:number
-  totalIdealReadRate:number
-  totalHashRate:number
-  totalIdealHashRate:number
-  minerRates: { [key: string]: { [key: string]: string; }; },
+export interface MinerInfo {
+  hostname: string;
+  protocol: string;
+  port: string;
+}
+
+export interface TotalMetrics {
+  totalStorageSize: number;
+  totalReadRate: number;
+  totalIdealReadRate: number;
+  totalIdealHashRate: number;
+  totalHashRate: number;
+}
+
+export interface MetricsState extends TotalMetrics {
+  
+  minerRates: { [key: string]: { [key: string]: string } };
   weaveSize: number | null;
   minerMetrics: PrometheusMetrics[] | undefined;
+  coordinatedMiningData: { [key: string]: { [key: string]: any } };
 }
