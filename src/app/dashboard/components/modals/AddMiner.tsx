@@ -1,14 +1,23 @@
-'use client'
+"use client";
 
 import { MinerInfo } from "@/types";
-import { Dispatch, SetStateAction, useActionState, useEffect, useState } from "react";
+import {
+  Dispatch,
+  SetStateAction,
+  useActionState,
+  useEffect,
+  useState,
+} from "react";
 
 interface AddMinerModalProps {
+  storedMinerInfo?: MinerInfo;
   HandleCloseModal?: Dispatch<SetStateAction<boolean>>;
 }
 
-export const AddMinerModal = ({ HandleCloseModal }: AddMinerModalProps) => {
-  const [storedMinerInfo, setStoredMinerInfo] = useState<MinerInfo>()
+export const AddMinerModal = ({
+  storedMinerInfo,
+  HandleCloseModal,
+}: AddMinerModalProps) => {
   const [minerInfo, setMinerInfo] = useState<MinerInfo>({
     hostname: storedMinerInfo?.hostname || "",
     protocol: storedMinerInfo?.protocol || "http",
@@ -17,8 +26,8 @@ export const AddMinerModal = ({ HandleCloseModal }: AddMinerModalProps) => {
 
   useEffect(() => {
     const localStorageData = localStorage.getItem("minerInfo");
-    setMinerInfo(JSON.parse(localStorageData!))
-  }, [])
+    //setStoredMinerInfo(JSON.parse(localStorageData!));
+  }, []);
 
   const queryMiner = () => {
     localStorage.setItem("minerInfo", JSON.stringify(minerInfo));

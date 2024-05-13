@@ -11,12 +11,12 @@ interface NavLink {
 
 export default function Navbar() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [minerInfo, setMinerInfo] = useState<MinerInfo>()
+  const [minerInfo, setMinerInfo] = useState<MinerInfo>();
 
   useEffect(() => {
     const localStorageData = localStorage.getItem("minerInfo");
-    setMinerInfo(JSON.parse(localStorageData!))
-  }, [])
+    setMinerInfo(JSON.parse(localStorageData!));
+  }, []);
 
   return (
     <header className="w-full">
@@ -36,7 +36,7 @@ export default function Navbar() {
               disabled={!minerInfo?.hostname}
               className="flex items-center gap-2 border border-gray-950 rounded-md px-4 py-2 font-normal outline-none text-gray-950 hover:bg-gray-150 disabled:cursor-not-allowed"
             >
-              <img src="/assets/wallet.svg" />
+              <img src="/assets/wallet.svg" alt="wallet logo" />
               <span>Add Miner</span>
             </button>
           ) : (
@@ -47,7 +47,10 @@ export default function Navbar() {
           )}
           {isModalOpen && (
             <div className="fixed inset-0 pt-40  bg-gray-600/50 overflow-y-auto w-full">
-              <AddMinerModal HandleCloseModal={setIsModalOpen} />
+              <AddMinerModal
+                storedMinerInfo={minerInfo!}
+                HandleCloseModal={setIsModalOpen}
+              />
             </div>
           )}
         </div>

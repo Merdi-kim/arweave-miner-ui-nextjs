@@ -26,12 +26,12 @@ const Dashboard = () => {
   );
   let minerRatesOverTime: Array<{ time: string; data: any }> = [];
 
-  const [minerInfo, setMinerInfo] = useState<MinerInfo>()
+  const [minerInfo, setMinerInfo] = useState<MinerInfo>();
 
   useEffect(() => {
     const localStorageData = localStorage.getItem("minerInfo");
-    const storedMinerInfo = JSON.parse(localStorageData!)
-    setMinerInfo(storedMinerInfo)
+    const storedMinerInfo = JSON.parse(localStorageData!);
+    setMinerInfo(storedMinerInfo);
     const getData = async () => {
       const data = await fetch("/api", {
         method: "POST",
@@ -70,51 +70,48 @@ const Dashboard = () => {
       setIsLoading(false);
     };
 
-    if (!storedMinerInfo?.hostname) return;
+    if (!storedMinerInfo?.hostname) return setIsLoading(false);
 
     getData();
     setInterval(() => getData(), 30000);
   }, []);
 
+  console.log(!!minerInfo?.hostname);
+
   return (
     <div>
-      {minerInfo?.hostname && !isLoading ? (
+      {!minerInfo?.hostname && !isLoading && <NoMiner />}
+      {minerInfo?.hostname && !isLoading && (
         <div>
-          {!isLoading ? (
-            <div>
-              <div className="w-full flex justify-center items-center h-20 p-4 md:p-0 mt-4 rounded-lg md:flex-row md:space-x-2 md:mt-0">
-                <button
-                  onClick={() => setisMinerDashBoard(true)}
-                  className={`block px-5 py-2 rounded hover:bg-gray-200 ${isMinerDashBoard ? "font-medium bg-gray-200" : "font-light"}`}
-                >
-                  Miner
-                </button>
-                <button
-                  onClick={() => setisMinerDashBoard(false)}
-                  className={`block px-5 py-2 rounded hover:bg-gray-200 ${!isMinerDashBoard ? "font-medium bg-gray-200" : "font-light"}`}
-                >
-                  Peers
-                </button>
-              </div>
+          <div className="w-full flex justify-center items-center h-20 p-4 md:p-0 mt-4 rounded-lg md:flex-row md:space-x-2 md:mt-0">
+            <button
+              onClick={() => setisMinerDashBoard(true)}
+              className={`block px-5 py-2 rounded hover:bg-gray-200 ${isMinerDashBoard ? "font-medium bg-gray-200" : "font-light"}`}
+            >
+              Miner
+            </button>
+            <button
+              onClick={() => setisMinerDashBoard(false)}
+              className={`block px-5 py-2 rounded hover:bg-gray-200 ${!isMinerDashBoard ? "font-medium bg-gray-200" : "font-light"}`}
+            >
+              Peers
+            </button>
+          </div>
 
-              <div>
-                {isMinerDashBoard ? (
-                  <MinerDashboard
-                    metricsData={metricsData}
-                    totalMetrics={totalMetrics}
-                  />
-                ) : (
-                  <CoordinatedMiningDashBoard />
-                )}
-              </div>
-            </div>
-          ) : (
-            <MinerDashboardLoading />
-          )}
+          <div>
+            {isMinerDashBoard ? (
+              <MinerDashboard
+                metricsData={metricsData}
+                totalMetrics={totalMetrics}
+              />
+            ) : (
+              <CoordinatedMiningDashBoard />
+            )}
+          </div>
         </div>
-      ) : (
-        <NoMiner />
       )}
+
+      {isLoading && <MinerDashboardLoading />}
     </div>
   );
 };
