@@ -1,3 +1,5 @@
+'use client'
+
 import { MinerInfo } from "@/types";
 import { Dispatch, SetStateAction, useState } from "react";
 
