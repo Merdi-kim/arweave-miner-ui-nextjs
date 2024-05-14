@@ -3,10 +3,10 @@
 import { PrometheusMetrics } from "@/types";
 import { useState } from "react";
 import Graphs from "./Graphs";
+import { ONE_TERABYTE } from "@/utils";
 
 const MetricsCard = ({ metric }: { metric: PrometheusMetrics }) => {
-  const ONE_TERABYTE = 1000000000000;
-  const MODULE_MAX_SIZE = 3600000000000;
+  const MODULE_MAX_SIZE = 3.6 * ONE_TERABYTE;
 
   const [showMetricsWithChart, setShowMetricsWithChart] = useState(false);
 
@@ -28,7 +28,7 @@ const MetricsCard = ({ metric }: { metric: PrometheusMetrics }) => {
             {Number(
               Number(metric.labels.storage_module_size) / ONE_TERABYTE,
             ).toFixed(1)}{" "}
-            TB
+            TiB
           </span>
         </div>
         <div className="flex flex-col items-center">
@@ -37,7 +37,7 @@ const MetricsCard = ({ metric }: { metric: PrometheusMetrics }) => {
             {(
               (Number(metric.labels.storage_module_size) / MODULE_MAX_SIZE) *
               100
-            ).toFixed(2)}{" "}
+            ).toFixed(1)}{" "}
             %
           </span>
         </div>

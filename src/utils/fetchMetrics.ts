@@ -98,6 +98,7 @@ export const fetchMetrics = async (url?: string): Promise<MetricsState> => {
     (item: PrometheusMetricParser) =>
       item.name === "v2_index_data_size_by_packing",
   );
+
   if (dataByPacking) {
     dataByPacking.metrics.forEach((item) => {
       //this check will filter out unpacked data
@@ -115,6 +116,14 @@ export const fetchMetrics = async (url?: string): Promise<MetricsState> => {
       }
     });
   }
+  console.log(minerMetrics)
+
+  const minerMetricsWithNoDuplicates = minerMetrics.reduce((prev:Array<PrometheusMetrics>, curr:PrometheusMetrics) => {
+    if(!prev.some((obj:PrometheusMetrics) => obj.labels.partition_number === curr.labels.partition_number)) {
+      prev.push(curr)
+    }
+    return prev
+  }, [])
 
   const coordinatedMiningData = getCoordinatedMiningData(parsedData);
 

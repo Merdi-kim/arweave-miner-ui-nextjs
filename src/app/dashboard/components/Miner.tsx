@@ -9,15 +9,18 @@ import {
   LinearScale,
   LineElement,
   PointElement,
+  LabelItem
 } from "chart.js";
 import { useRecoilValue } from "recoil";
 import { metrics } from "@/store";
 import Graphs from "./cards/Graphs";
+import { ONE_TERABYTE } from "@/utils";
 
 Chart.register(CategoryScale);
 Chart.register(LinearScale);
 Chart.register(PointElement);
 Chart.register(LineElement);
+//Chart.register(LabelIt);
 
 const MinerDashboard = ({
   totalMetrics,
@@ -38,33 +41,33 @@ const MinerDashboard = ({
                 Total Storage :{" "}
                 <span className="font-bold">
                   {Number(
-                    totalMetrics.totalStorageSize / 1000000000000,
+                    totalMetrics.totalStorageSize / ONE_TERABYTE,
                   ).toFixed(1)}{" "}
-                  TB
+                  TiB
                 </span>
               </div>
               <div className="my-2">
                 Total Read Rate :{" "}
                 <span className="font-bold">
-                  {totalMetrics.totalReadRate.toFixed(1)} MiB/s
+                  {Number(totalMetrics.totalReadRate).toFixed(1)} MiB/s
                 </span>
               </div>
               <div className="my-2">
                 Total Hash Rate :{" "}
                 <span className="font-bold">
-                  {totalMetrics.totalHashRate.toFixed(1)} h/s
+                  {Number(totalMetrics.totalHashRate).toFixed(1)} h/s
                 </span>
               </div>
               <div className="my-2">
                 Total Ideal Read Rate :{" "}
                 <span className="font-bold">
-                  {totalMetrics.totalIdealReadRate.toFixed(1)} MiB/s
+                  {Number(totalMetrics.totalIdealReadRate).toFixed(1)} MiB/s
                 </span>
               </div>
               <div className="mt-2">
                 Total Ideal Hash Rate :{" "}
                 <span className="font-bold">
-                  {totalMetrics.totalIdealHashRate.toFixed(1)} h/s
+                  {Number(totalMetrics.totalIdealHashRate).toFixed(1)} h/s
                 </span>
               </div>
               <div className="mt-2">
@@ -81,8 +84,7 @@ const MinerDashboard = ({
             </div>
             </div>
             <div className=" flex flex-col items-center">
-              <span className="text-xs font-light mb-[1px] text-gray-500">Documentation</span>
-              <a href="https://docs.arweave.org/developers/mining/mining-guide" target="_blank" className="font-bold cursor-pointer">...</a>
+              <a href="https://docs.arweave.org/developers/mining/mining-guide" target="_blank" className="font-bold cursor-pointer"><img src="/assets/help.svg" alt="question mark" className="h-4" /></a>
             </div>
           </div>
           <details className="mb-4 p-4 open:border-[1px] open:border-slate-400 rounded-md"> 

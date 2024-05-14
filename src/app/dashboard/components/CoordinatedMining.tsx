@@ -58,7 +58,7 @@ const CoordinatedMiningDashBoard = () => {
                         <span className="font-semibold">
                           {Number(
                             /*@ts-ignore*/
-                            coordinatedMiningMetricsValue[key].h1.from,
+                            coordinatedMiningMetricsValue[key].h1.to,
                           ).toFixed(1)}{" "}
                           h/s
                         </span>
@@ -68,7 +68,7 @@ const CoordinatedMiningDashBoard = () => {
                         <span className="font-semibold">
                           {Number(
                             /*@ts-ignore*/
-                            coordinatedMiningMetricsValue[key].h1.to,
+                            coordinatedMiningMetricsValue[key].h1.from,
                           ).toFixed(1)}{" "}
                           h/s
                         </span>
@@ -80,7 +80,7 @@ const CoordinatedMiningDashBoard = () => {
                         <span className="font-semibold">
                           {Number(
                             //@ts-ignore
-                            coordinatedMiningMetricsValue[key].h2.from,
+                            coordinatedMiningMetricsValue[key].h2.to,
                           ).toFixed(1)}{" "}
                           h/s
                         </span>
@@ -90,7 +90,7 @@ const CoordinatedMiningDashBoard = () => {
                         <span className="font-semibold">
                           {Number(
                             //@ts-ignore
-                            coordinatedMiningMetricsValue[key].h2.to,
+                            coordinatedMiningMetricsValue[key].h2.from,
                           ).toFixed(1)}{" "}
                           h/s
                         </span>

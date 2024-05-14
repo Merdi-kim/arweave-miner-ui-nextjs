@@ -2,16 +2,18 @@
 
 import React, { useEffect, useState } from "react";
 import MinerDashboard from "./dashboard/components/Miner";
-import CoordinatedMiningDashBoard from "././dashboard/components/CoordinatedMining";
+import CoordinatedMiningDashBoard from "./dashboard/components/CoordinatedMining";
 import { MinerInfo, PrometheusMetrics, TotalMetrics } from "@/types";
 import { useSetRecoilState } from "recoil";
 import { coordinatedMiningMetrics, metrics } from "@/store";
-import MinerDashboardLoading from "././dashboard/components/Loadings/MinerDashboard";
+import MinerDashboardLoading from "./dashboard/components/Loadings/MinerDashboard";
 import NoMiner from "./dashboard/components/NoMiner";
+import Error from "./dashboard/components/Error";
 
 const Dashboard = () => {
   const [isMinerDashBoard, setisMinerDashBoard] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
+  const [isError, setIsError] = useState(false);
   const [metricsData, setMetricsData] = useState<Array<PrometheusMetrics>>([]);
   const [totalMetrics, setTotalMetrics] = useState<TotalMetrics>({
     totalStorageSize: 0,
@@ -33,11 +35,12 @@ const Dashboard = () => {
     const storedMinerInfo = JSON.parse(localStorageData!);
     setMinerInfo(storedMinerInfo);
     const getData = async () => {
+      try {
       const data = await fetch("/api", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          url: `${storedMinerInfo.protocol}://${storedMinerInfo.hostname}:${storedMinerInfo.port}/metrics`,
+          url: `${storedMinerInfo.protocol}://${storedMinerInfo.hostname}/metrics`,
         }),
       });
       const {
@@ -54,7 +57,7 @@ const Dashboard = () => {
       const currentDate = new Date();
       const minerRateWithTimeStamp = {
         time: `${currentDate.getHours()} : ${currentDate.getMinutes()}`,
-        data: {...minerRates, total:{totalHashRate, totalIdealHashRate, totalIdealReadRate, totalReadRate}},
+        data: minerRates,
       };
       minerRatesOverTime = [...minerRatesOverTime, minerRateWithTimeStamp];
       setMinerMetrics(minerRatesOverTime);
@@ -68,6 +71,11 @@ const Dashboard = () => {
         totalHashRate,
       });
       setIsLoading(false);
+    }catch(err) {
+      console.log(err)
+      setIsLoading(false);
+      setIsError(true)
+    }
     };
 
     if (!storedMinerInfo?.hostname) return setIsLoading(false);
@@ -78,8 +86,8 @@ const Dashboard = () => {
 
   return (
     <div>
-      {!minerInfo?.hostname && !isLoading && <NoMiner />}
-      {minerInfo?.hostname && !isLoading && (
+      {!minerInfo?.hostname && !isLoading && !isError && <NoMiner />}
+      {minerInfo?.hostname && !isLoading && !isError && (
         <div>
           <div className="w-full flex justify-center items-center h-20 p-4 md:p-0 mt-4 rounded-lg md:flex-row md:space-x-2 md:mt-0">
             <button
@@ -108,7 +116,7 @@ const Dashboard = () => {
           </div>
         </div>
       )}
-
+      {!isLoading && isError && <Error minerInfo={minerInfo!}/>}
       {isLoading && <MinerDashboardLoading />}
     </div>
   );

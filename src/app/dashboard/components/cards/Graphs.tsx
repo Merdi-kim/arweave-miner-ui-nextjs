@@ -6,6 +6,8 @@ import {
   LinearScale,
   LineElement,
   PointElement,
+  Tooltip,
+  Legend
 } from "chart.js";
 import { useRecoilValue } from "recoil";
 import { metrics } from "@/store";
@@ -13,6 +15,8 @@ Chart.register(CategoryScale);
 Chart.register(LinearScale);
 Chart.register(PointElement);
 Chart.register(LineElement);
+Chart.register(Tooltip)
+Chart.register(Legend)
 
 interface GraphsProps {
   metric?: PrometheusMetrics;
@@ -78,9 +82,11 @@ const Graphs = ({ metric }: GraphsProps) => {
         fill: false,
         borderColor: "rgb(75, 192, 192)",
         tension: 0.1,
+        label:'Read Rate'
       },
       {
         data: idealReadRate.data,
+        label:'Ideal Read Rate',
         fill: false,
         borderColor: "rgb(75, 12, 192)",
         tension: 0.1,
@@ -96,12 +102,14 @@ const Graphs = ({ metric }: GraphsProps) => {
         fill: false,
         borderColor: "rgb(75, 192, 192)",
         tension: 0.1,
+        label:'Hash Rate'
       },
       {
         data: idealHashRate.data,
         fill: false,
         borderColor: "rgb(75, 12, 192)",
         tension: 0.1,
+        label:'Ideal Hash Rate'
       },
     ],
   };
@@ -126,6 +134,7 @@ const Graphs = ({ metric }: GraphsProps) => {
             className="h-[150px] sm:h-[200px] w-full"
             width={600}
             data={readData}
+            //options={Tooltip}
           />
         </div>
 

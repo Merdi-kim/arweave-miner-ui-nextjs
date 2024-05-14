@@ -8,10 +8,12 @@ import { useSetRecoilState } from "recoil";
 import { coordinatedMiningMetrics, metrics } from "@/store";
 import MinerDashboardLoading from "./components/Loadings/MinerDashboard";
 import NoMiner from "./components/NoMiner";
+import Error from "./components/Error";
 
 const Dashboard = () => {
   const [isMinerDashBoard, setisMinerDashBoard] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
+  const [isError, setIsError] = useState(false);
   const [metricsData, setMetricsData] = useState<Array<PrometheusMetrics>>([]);
   const [totalMetrics, setTotalMetrics] = useState<TotalMetrics>({
     totalStorageSize: 0,
@@ -33,6 +35,7 @@ const Dashboard = () => {
     const storedMinerInfo = JSON.parse(localStorageData!);
     setMinerInfo(storedMinerInfo);
     const getData = async () => {
+      try {
       const data = await fetch("/api", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -68,6 +71,10 @@ const Dashboard = () => {
         totalHashRate,
       });
       setIsLoading(false);
+    }catch(err) {
+      setIsLoading(false);
+      setIsError(true)
+    }
     };
 
     if (!storedMinerInfo?.hostname) return setIsLoading(false);
@@ -110,7 +117,7 @@ const Dashboard = () => {
           </div>
         </div>
       )}
-
+      {(!isLoading && isError) && <Error/>}
       {isLoading && <MinerDashboardLoading />}
     </div>
   );
