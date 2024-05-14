@@ -117,7 +117,7 @@ const Dashboard = () => {
           </div>
         </div>
       )}
-      {(!isLoading && isError) && <Error/>}
+      {(!isLoading && isError) && <Error minerInfo={minerInfo!}/>}
       {isLoading && <MinerDashboardLoading />}
     </div>
   );
