@@ -118,12 +118,12 @@ export const fetchMetrics = async (url?: string): Promise<MetricsState> => {
   }
   console.log(minerMetrics)
 
-  const minerMetricsWithNoDuplicates = minerMetrics.reduce((prev:Array<PrometheusMetrics>, curr:PrometheusMetrics) => {
+  /*const minerMetricsWithNoDuplicates = minerMetrics.reduce((prev:Array<PrometheusMetrics>, curr:PrometheusMetrics) => {
     if(!prev.some((obj:PrometheusMetrics) => obj.labels.partition_number === curr.labels.partition_number)) {
       prev.push(curr)
     }
     return prev
-  }, [])
+  }, [])*/
 
   const coordinatedMiningData = getCoordinatedMiningData(parsedData);
 

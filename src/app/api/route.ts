@@ -3,6 +3,7 @@ import { NextResponse, NextRequest } from "next/server";
 
 export async function POST(req: NextRequest) {
   const { url } = await req.json();
+  console.log(url)
 
   const {
     totalStorageSize,
