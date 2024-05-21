@@ -7,7 +7,7 @@ import {
   LineElement,
   PointElement,
   Tooltip,
-  Legend
+  Legend,
 } from "chart.js";
 import { useRecoilValue } from "recoil";
 import { metrics } from "@/store";
@@ -15,8 +15,8 @@ Chart.register(CategoryScale);
 Chart.register(LinearScale);
 Chart.register(PointElement);
 Chart.register(LineElement);
-Chart.register(Tooltip)
-Chart.register(Legend)
+Chart.register(Tooltip);
+Chart.register(Legend);
 
 interface GraphsProps {
   metric?: PrometheusMetrics;
@@ -46,22 +46,20 @@ const Graphs = ({ metric }: GraphsProps) => {
   metricsData.forEach((item) => {
     readRate.labels.push(item.time);
     hashRate.labels.push(item.time);
-    if(metric?.labels.partition_number) {
+    if (metric?.labels.partition_number) {
       readRate.data.push(item.data[metric.labels.partition_number].read);
-      idealReadRate.data.push(item.data[metric.labels.partition_number].ideal_read)
+      idealReadRate.data.push(
+        item.data[metric.labels.partition_number].ideal_read,
+      );
       hashRate.data.push(item.data[metric.labels.partition_number].hash);
       idealHashRate.data.push(
-      item.data[metric.labels.partition_number].ideal_hash,
-    );
+        item.data[metric.labels.partition_number].ideal_hash,
+      );
     } else {
       readRate.data.push(item.data.total.totalReadRate);
-      idealReadRate.data.push(
-        item.data.total.totalIdealReadRate,
-      );
+      idealReadRate.data.push(item.data.total.totalIdealReadRate);
       hashRate.data.push(item.data.total.totalHashRate);
-      idealHashRate.data.push(
-        item.data.total.totalIdealHashRate,
-      );
+      idealHashRate.data.push(item.data.total.totalIdealHashRate);
     }
   });
 
@@ -82,11 +80,11 @@ const Graphs = ({ metric }: GraphsProps) => {
         fill: false,
         borderColor: "rgb(75, 192, 192)",
         tension: 0.1,
-        label:'Read Rate'
+        label: "Read Rate",
       },
       {
         data: idealReadRate.data,
-        label:'Ideal Read Rate',
+        label: "Ideal Read Rate",
         fill: false,
         borderColor: "rgb(75, 12, 192)",
         tension: 0.1,
@@ -102,14 +100,14 @@ const Graphs = ({ metric }: GraphsProps) => {
         fill: false,
         borderColor: "rgb(75, 192, 192)",
         tension: 0.1,
-        label:'Hash Rate'
+        label: "Hash Rate",
       },
       {
         data: idealHashRate.data,
         fill: false,
         borderColor: "rgb(75, 12, 192)",
         tension: 0.1,
-        label:'Ideal Hash Rate'
+        label: "Ideal Hash Rate",
       },
     ],
   };

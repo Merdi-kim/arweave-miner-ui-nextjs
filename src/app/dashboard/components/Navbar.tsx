@@ -4,30 +4,20 @@ import { useEffect, useState } from "react";
 import { AddMinerModal } from "./modals/AddMiner";
 import { MinerInfo } from "@/types";
 
-interface NavLink {
-  href: string;
-  label: string;
-}
 
 export default function Navbar() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [minerInfo, setMinerInfo] = useState<MinerInfo>();
-  const [isRefreshing, setIsRefreshing] = useState(false)
 
   useEffect(() => {
     const localStorageData = localStorage.getItem("minerInfo");
     setMinerInfo(JSON.parse(localStorageData!));
   }, []);
 
-  const refresh = async() => {
-
-
-  }
-
   return (
     <header className="w-full">
-      <nav className="w-full h-[5rem] top-0 left-0 z-20 border-b border-gray-300 bg-[#F1F1F1]">
-        <div className="flex whitespace-nowrap items-center justify-between p-4 sm:px-10">
+      <nav className="w-full h-14 md:h-20 top-0 left-0 z-20 border-b border-gray-300 bg-[#F1F1F1]">
+        <div className="h-full flex whitespace-nowrap items-center justify-between px-4 md:px-10">
           <Link href="/" className="flex items-center">
             <img
               src="/assets/logo.svg"
@@ -46,13 +36,10 @@ export default function Navbar() {
               <span>Add Miner</span>
             </button>
           ) : (
-            
-            
             <button
               onClick={() => setIsModalOpen(true)}
               className="hover:bg-gray-200 px-4 py-2 rounded-md text-sm sm:text-base"
             >{`${minerInfo?.hostname}:${minerInfo?.port}`}</button>
-           
           )}
           {isModalOpen && (
             <div className="fixed inset-0 pt-40  bg-gray-600/50 overflow-y-auto w-full">

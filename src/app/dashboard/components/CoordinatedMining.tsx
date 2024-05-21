@@ -16,7 +16,7 @@ const CoordinatedMiningDashBoard = () => {
           Object.keys(coordinatedMiningMetricsValue).map((key: string) => (
             <div key={key} className="w-full flex flex-col items-center">
               {key == "total" ? (
-                <div className="w-full sm:w-[600px] md:w-[700px] p-4 rounded-md border-b-2 shadow-sm border-b-gray-300 my-3">
+                <div className="w-full sm:w-[600px] md:w-[700px] py-3 px-1 border-b-2 border-b-gray-300 my-3">
                   <div className="text-center text-sm sm:text-base">
                     <span className="font-semibold">{key.toUpperCase()}</span>
                   </div>
@@ -46,7 +46,7 @@ const CoordinatedMiningDashBoard = () => {
               ) : (
                 <div
                   key={key}
-                  className="w-full sm:w-[600px] md:w-[700px] p-4 rounded-md border-b-2 shadow-sm border-b-gray-300 my-3"
+                  className="w-full sm:w-[600px] md:w-[700px] py-3 px-1 border-b-2 border-b-gray-300 my-3"
                 >
                   <div className="text-center text-sm sm:text-base">
                     Peer <span className="font-semibold">{key}</span>

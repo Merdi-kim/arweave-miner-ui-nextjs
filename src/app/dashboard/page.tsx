@@ -36,45 +36,45 @@ const Dashboard = () => {
     setMinerInfo(storedMinerInfo);
     const getData = async () => {
       try {
-      const data = await fetch("/api", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          url: `${storedMinerInfo.protocol}://${storedMinerInfo.hostname}/metrics`,
-        }),
-      });
-      const {
-        totalStorageSize,
-        totalReadRate,
-        totalIdealReadRate,
-        totalHashRate,
-        totalIdealHashRate,
-        minerRates,
-        weaveSize,
-        minerMetrics: metricsDataFromApi,
-        coordinatedMiningData,
-      } = await data.json();
-      const currentDate = new Date();
-      const minerRateWithTimeStamp = {
-        time: `${currentDate.getHours()} : ${currentDate.getMinutes()}`,
-        data: minerRates,
-      };
-      minerRatesOverTime = [...minerRatesOverTime, minerRateWithTimeStamp];
-      setMinerMetrics(minerRatesOverTime);
-      setMetricsData(metricsDataFromApi);
-      setCoordinatedMiningMetrics(coordinatedMiningData);
-      setTotalMetrics({
-        totalStorageSize,
-        totalReadRate,
-        totalIdealReadRate,
-        totalIdealHashRate,
-        totalHashRate,
-      });
-      setIsLoading(false);
-    }catch(err) {
-      setIsLoading(false);
-      setIsError(true)
-    }
+        const data = await fetch("/api", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            url: `${storedMinerInfo.protocol}://${storedMinerInfo.hostname}/metrics`,
+          }),
+        });
+        const {
+          totalStorageSize,
+          totalReadRate,
+          totalIdealReadRate,
+          totalHashRate,
+          totalIdealHashRate,
+          minerRates,
+          weaveSize,
+          minerMetrics: metricsDataFromApi,
+          coordinatedMiningData,
+        } = await data.json();
+        const currentDate = new Date();
+        const minerRateWithTimeStamp = {
+          time: `${currentDate.getHours()} : ${currentDate.getMinutes()}`,
+          data: minerRates,
+        };
+        minerRatesOverTime = [...minerRatesOverTime, minerRateWithTimeStamp];
+        setMinerMetrics(minerRatesOverTime);
+        setMetricsData(metricsDataFromApi);
+        setCoordinatedMiningMetrics(coordinatedMiningData);
+        setTotalMetrics({
+          totalStorageSize,
+          totalReadRate,
+          totalIdealReadRate,
+          totalIdealHashRate,
+          totalHashRate,
+        });
+        setIsLoading(false);
+      } catch (err) {
+        setIsLoading(false);
+        setIsError(true);
+      }
     };
 
     if (!storedMinerInfo?.hostname) return setIsLoading(false);
@@ -83,25 +83,23 @@ const Dashboard = () => {
     setInterval(() => getData(), 30000);
   }, []);
 
-  console.log(!!minerInfo?.hostname);
-
   return (
     <div>
       {!minerInfo?.hostname && !isLoading && <NoMiner />}
       {minerInfo?.hostname && !isLoading && (
         <div>
-          <div className="w-full flex justify-center items-center h-20 p-4 md:p-0 mt-4 rounded-lg md:flex-row md:space-x-2 md:mt-0">
+          <div className="w-full flex justify-center items-center bg-green-600 h-5 p-4 md:p-0 mt-4 md:mt-0 rounded-lg md:flex-row md:space-x-2 ">
             <button
               onClick={() => setisMinerDashBoard(true)}
-              className={`block px-5 py-2 rounded hover:bg-gray-200 ${isMinerDashBoard ? "font-medium bg-gray-200" : "font-light"}`}
+              className={`block px-5 py-2 rounded hover:bg-gray-200 ${isMinerDashBoard ? "font-medium bg-gray-500" : "font-light"}`}
             >
-              Miner
+              Miners
             </button>
             <button
               onClick={() => setisMinerDashBoard(false)}
               className={`block px-5 py-2 rounded hover:bg-gray-200 ${!isMinerDashBoard ? "font-medium bg-gray-200" : "font-light"}`}
             >
-              Peers
+              Peerss
             </button>
           </div>
 
@@ -117,7 +115,7 @@ const Dashboard = () => {
           </div>
         </div>
       )}
-      {(!isLoading && isError) && <Error minerInfo={minerInfo!}/>}
+      {!isLoading && isError && <Error minerInfo={minerInfo!} />}
       {isLoading && <MinerDashboardLoading />}
     </div>
   );

@@ -25,17 +25,18 @@ export const AddMinerModal = ({
     port: storedMinerInfo?.port || "1984",
   });
 
-  
-
-  const queryMiner = (e:FormEvent) => {
-    e.preventDefault()
+  const queryMiner = (e: FormEvent) => {
+    e.preventDefault();
     localStorage.setItem("minerInfo", JSON.stringify(minerInfo));
     window.location.reload();
   };
 
   return (
     <div className="relative mx-auto p-7 border shadow-lg rounded-md bg-white w-10/12 sm:w-[32rem]">
-      <form onSubmit={queryMiner} className="mx-auto flex flex-col items-center justify-center w-full sm:w-96">
+      <form
+        onSubmit={queryMiner}
+        className="mx-auto flex flex-col items-center justify-center w-full sm:w-96"
+      >
         <div className="w-full">
           <input
             type="text"

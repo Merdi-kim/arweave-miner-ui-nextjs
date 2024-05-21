@@ -13,7 +13,7 @@ const MetricsCard = ({ metric }: { metric: PrometheusMetrics }) => {
   return (
     <div
       onClick={() => setShowMetricsWithChart(true)}
-      className="w-full  md:w-[750px] lg:w-[900px] border-[1px] border-slate-400 my-2 py-2 px-5 rounded-md hover:cursor-pointer transition-all hover:border-black font-light text-xs sm:text-sm"
+      className="w-full  md:w-[750px] lg:w-[900px] border-[1px] border-gray-300 my-2 py-2 px-5 rounded-md hover:cursor-pointer transition-all hover:border-black font-light text-xs sm:text-sm"
     >
       <div className="flex justify-between items-start">
         <div>
@@ -60,12 +60,16 @@ const MetricsCard = ({ metric }: { metric: PrometheusMetrics }) => {
               </span>
             </div>
             <div>
-                % of Ideal:{" "}
-                <span className="font-semibold">
-                  {Number((Number(metric.labels.read)/Number(metric.labels.ideal_read))* 100).toFixed(1)} %
-                </span>
+              % of Ideal:{" "}
+              <span className="font-semibold">
+                {Number(
+                  (Number(metric.labels.read) /
+                    Number(metric.labels.ideal_read)) *
+                    100,
+                ).toFixed(1)}{" "}
+                %
+              </span>
             </div>
-            
           </div>
         </div>
         <div>
@@ -84,12 +88,16 @@ const MetricsCard = ({ metric }: { metric: PrometheusMetrics }) => {
               </span>
             </div>
             <div>
-                % of Ideal:{" "}
-                <span className="font-semibold">
-                  {Number((Number(metric.labels.hash)/Number(metric.labels.ideal_hash))* 100).toFixed(1)} %
-                </span>
+              % of Ideal:{" "}
+              <span className="font-semibold">
+                {Number(
+                  (Number(metric.labels.hash) /
+                    Number(metric.labels.ideal_hash)) *
+                    100,
+                ).toFixed(1)}{" "}
+                %
+              </span>
             </div>
-            
           </div>
         </div>
       </div>

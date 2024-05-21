@@ -7,7 +7,7 @@ import {
 import parsePrometheusTextFormat from "parse-prometheus-text-format";
 
 const fetchRawMinerMetrics = async (
-  url: string = "http://testnet-2.arweave.net:1984/metrics",
+  url: string, //= "http://testnet-2.arweave.net:1984/metrics",
 ) => {
   try {
     const res = await fetch(url);
@@ -80,7 +80,7 @@ const getCoordinatedMiningData = (data: PrometheusMetricParser[]) => {
   return coordinatedMiningData;
 };
 
-export const fetchMetrics = async (url?: string): Promise<MetricsState> => {
+export const fetchMetrics = async (url: string): Promise<MetricsState> => {
   let minerMetrics: Array<PrometheusMetrics> = [];
   let totalStorageSize: number = 0;
   let totalReadRate: number = 0;
@@ -116,7 +116,7 @@ export const fetchMetrics = async (url?: string): Promise<MetricsState> => {
       }
     });
   }
-  console.log(minerMetrics)
+  console.log(minerMetrics);
 
   /*const minerMetricsWithNoDuplicates = minerMetrics.reduce((prev:Array<PrometheusMetrics>, curr:PrometheusMetrics) => {
     if(!prev.some((obj:PrometheusMetrics) => obj.labels.partition_number === curr.labels.partition_number)) {

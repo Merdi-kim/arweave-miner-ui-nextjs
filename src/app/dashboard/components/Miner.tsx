@@ -9,7 +9,7 @@ import {
   LinearScale,
   LineElement,
   PointElement,
-  LabelItem
+  LabelItem,
 } from "chart.js";
 import { useRecoilValue } from "recoil";
 import { metrics } from "@/store";
@@ -35,30 +35,30 @@ const MinerDashboard = ({
       {/*<h2 className="mb-10">Miner Output</h2>*/}
       <div className="w-full flex flex-col items-center">
         <div className="w-full md:w-[750px] lg:w-[900px]">
-          <div className="w-full flex justify-between py-4">
-            <div className="text-sm sm:text-base font-light">
-              <div className="my-2">
+          <div className="w-full flex justify-between ">
+            <div className="text-xs sm:text-sm font-light">
+              <div className="mb-2">
                 Total Storage :{" "}
                 <span className="font-bold">
-                  {Number(
-                    totalMetrics.totalStorageSize / ONE_TERABYTE,
-                  ).toFixed(1)}{" "}
+                  {Number(totalMetrics.totalStorageSize / ONE_TERABYTE).toFixed(
+                    1,
+                  )}{" "}
                   TiB
                 </span>
               </div>
-              <div className="my-2">
+              <div className="mt-2">
                 Total Read Rate :{" "}
                 <span className="font-bold">
                   {Number(totalMetrics.totalReadRate).toFixed(1)} MiB/s
                 </span>
               </div>
-              <div className="my-2">
+              <div className="mt-2">
                 Total Hash Rate :{" "}
                 <span className="font-bold">
                   {Number(totalMetrics.totalHashRate).toFixed(1)} h/s
                 </span>
               </div>
-              <div className="my-2">
+              <div className="mt-2">
                 Total Ideal Read Rate :{" "}
                 <span className="font-bold">
                   {Number(totalMetrics.totalIdealReadRate).toFixed(1)} MiB/s
@@ -73,24 +73,46 @@ const MinerDashboard = ({
               <div className="mt-2">
                 % of Ideal Read Rate:{" "}
                 <span className="font-semibold">
-                  {Number((Number(totalMetrics.totalReadRate)/Number(totalMetrics.totalIdealReadRate))* 100).toFixed(1)} %
+                  {Number(
+                    (Number(totalMetrics.totalReadRate) /
+                      Number(totalMetrics.totalIdealReadRate)) *
+                      100,
+                  ).toFixed(1)}{" "}
+                  %
                 </span>
-            </div>
-            <div className="mt-2">
+              </div>
+              <div className="mt-2">
                 % of Ideal Hash Rate:{" "}
                 <span className="font-semibold">
-                  {Number((Number(totalMetrics.totalHashRate)/Number(totalMetrics.totalIdealHashRate))* 100).toFixed(1)} %
+                  {Number(
+                    (Number(totalMetrics.totalHashRate) /
+                      Number(totalMetrics.totalIdealHashRate)) *
+                      100,
+                  ).toFixed(1)}{" "}
+                  %
                 </span>
-            </div>
+              </div>
             </div>
             <div className=" flex flex-col items-center">
-              <a href="https://docs.arweave.org/developers/mining/mining-guide" target="_blank" className="font-bold cursor-pointer"><img src="/assets/help.svg" alt="question mark" className="h-4" /></a>
+              <a
+                href="https://docs.arweave.org/developers/mining/mining-guide"
+                target="_blank"
+                className="font-bold cursor-pointer"
+              >
+                <img
+                  src="/assets/help.svg"
+                  alt="question mark"
+                  className="h-3 md:h-4"
+                />
+              </a>
             </div>
           </div>
-          <details className="mb-4 p-4 open:border-[1px] open:border-slate-400 rounded-md"> 
-            <summary className="hover:font-bold cursor-pointer">More details</summary>
+          <details className="mb-4 py-2 group open:border-[1px] open:border-slate-400 open:mt-4 rounded-md">
+            <summary className="hover:font-bold cursor-pointer group-open:px-4">
+              More details
+            </summary>
             <div className="py-5 my-5 flex flex-col items-center">
-              <Graphs/>
+              <Graphs />
             </div>
           </details>
         </div>
