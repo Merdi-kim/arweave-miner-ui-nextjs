@@ -5,8 +5,6 @@ import {
   Dispatch,
   FormEvent,
   SetStateAction,
-  useActionState,
-  useEffect,
   useState,
 } from "react";
 
@@ -25,7 +23,7 @@ export const AddMinerModal = ({
     port: storedMinerInfo?.port || "1984",
   });
 
-  const queryMiner = (e: FormEvent) => {
+  const queryMiner = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     localStorage.setItem("minerInfo", JSON.stringify(minerInfo));
     window.location.reload();
@@ -74,6 +72,7 @@ export const AddMinerModal = ({
         <div>
           {HandleCloseModal && (
             <button
+            type="button"
               className="px-4 py-2 mr-6 text-black rounded-md hover:bg-gray-100 hover:border-black border-2"
               onClick={() => HandleCloseModal(false)}
             >

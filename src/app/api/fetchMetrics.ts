@@ -103,11 +103,9 @@ export const fetchMetrics = async (url: string): Promise<MetricsState> => {
     dataByPacking.metrics.forEach((item) => {
       //this check will filter out unpacked data
       if (item.labels.packing !== "unpacked") {
-        const miningRatesForPartition =
-          minerRates[item.labels.partition_number];
+        const miningRatesForPartition = minerRates[item.labels.partition_number];
         item.labels = { ...item.labels, ...miningRatesForPartition };
         minerMetrics.push(item);
-        //console.log(item)
         totalStorageSize += Number(item.labels.storage_module_size);
         totalReadRate += Number(item.labels.read);
         totalIdealReadRate += Number(item.labels.ideal_read);
@@ -116,14 +114,6 @@ export const fetchMetrics = async (url: string): Promise<MetricsState> => {
       }
     });
   }
-  console.log(minerMetrics);
-
-  /*const minerMetricsWithNoDuplicates = minerMetrics.reduce((prev:Array<PrometheusMetrics>, curr:PrometheusMetrics) => {
-    if(!prev.some((obj:PrometheusMetrics) => obj.labels.partition_number === curr.labels.partition_number)) {
-      prev.push(curr)
-    }
-    return prev
-  }, [])*/
 
   const coordinatedMiningData = getCoordinatedMiningData(parsedData);
 
@@ -133,7 +123,17 @@ export const fetchMetrics = async (url: string): Promise<MetricsState> => {
   const weaveSize = Number(weaveSizeMetric?.metrics[0].value);
   console.log("Done fetching metrics ✨");
 
-  minerMetrics = minerMetrics.sort(
+  const minerMetricsWithNoDuplicates = Object.values(minerMetrics.reduce((prev:{[key:string]:PrometheusMetrics}, curr:PrometheusMetrics) => {
+    const partitionNumber = curr.labels.partition_number;
+    if(!prev[partitionNumber]) {
+      prev[partitionNumber] = curr
+    } else {
+      prev[partitionNumber].labels.storage_module_size = `${Number(prev[partitionNumber].labels.storage_module_size) + Number(curr.labels.storage_module_size)}`
+    }
+    return prev
+  }, {}))
+
+  minerMetrics = minerMetricsWithNoDuplicates.sort(
     (a, b) =>
       parseInt(a.labels.partition_number) - parseInt(b.labels.partition_number),
   );

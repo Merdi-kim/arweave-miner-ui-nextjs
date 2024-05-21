@@ -57,7 +57,10 @@ const Dashboard = () => {
         const currentDate = new Date();
         const minerRateWithTimeStamp = {
           time: `${currentDate.getHours()} : ${currentDate.getMinutes()}`,
-          data: minerRates,
+          data: {
+            ...minerRates,
+            total: {totalHashRate, totalIdealHashRate, totalIdealReadRate, totalReadRate}
+          }
         };
         minerRatesOverTime = [...minerRatesOverTime, minerRateWithTimeStamp];
         setMinerMetrics(minerRatesOverTime);

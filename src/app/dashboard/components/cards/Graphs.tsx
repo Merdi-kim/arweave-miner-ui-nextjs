@@ -125,21 +125,20 @@ const Graphs = ({ metric }: GraphsProps) => {
         </div>
       </div>
 
-      <div className="py-5 my-5 flex flex-col items-center">
+      <div className="py-5 my-5 hidden sm:flex flex-col items-center">
         <div className="">
           <h4>Read Rate</h4>
           <Line
-            className="h-[150px] sm:h-[200px] w-full"
+            className="h-[200px] w-full"
             width={600}
             data={readData}
-            //options={Tooltip}
           />
         </div>
 
         <div className="mt-10">
           <h4>Hash Rate</h4>
           <Line
-            className="h-[150px] sm:h-[200px] w-full"
+            className="h-[200px] w-full"
             width={600}
             data={hashData}
           />
