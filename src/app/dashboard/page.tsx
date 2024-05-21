@@ -84,7 +84,7 @@ const Dashboard = () => {
   }, []);
 
   return (
-    <div>
+    <main>
       {!minerInfo?.hostname && !isLoading && <NoMiner />}
       {minerInfo?.hostname && !isLoading && (
         <div>
@@ -117,7 +117,7 @@ const Dashboard = () => {
       )}
       {!isLoading && isError && <Error minerInfo={minerInfo!} />}
       {isLoading && <MinerDashboardLoading />}
-    </div>
+    </main>
   );
 };
 
