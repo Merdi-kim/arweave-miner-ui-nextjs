@@ -29,10 +29,10 @@ const getMiningRateData = (data: PrometheusMetricParser[]) => {
   if (miningRateData) {
     miningRateData.metrics.forEach((item) => {
       let partition = item.labels.partition;
-      //if (partition !== 'total') {
+      if (partition !== 'total') {
         groupedMiningRateData[partition] = groupedMiningRateData[partition] || {};
         groupedMiningRateData[partition][item.labels.type] = item.value;
-      //}
+      }
     });
   }
   return groupedMiningRateData;
@@ -106,10 +106,6 @@ export const fetchMetrics = async (url: string): Promise<MetricsState> => {
         item.labels = { ...item.labels, ...miningRatesForPartition };
         minerMetrics.push(item);
         totalStorageSize += Number(item.value);
-        totalReadRate += Number(item.labels.read);
-        totalIdealReadRate += Number(item.labels.ideal_read);
-        totalHashRate += Number(item.labels.hash);
-        totalIdealHashRate += Number(item.labels.ideal_hash);
       }
     });
   }
@@ -129,14 +125,29 @@ export const fetchMetrics = async (url: string): Promise<MetricsState> => {
         if (!prev[partitionNumber]) {
           prev[partitionNumber] = curr;
         } else {
-          prev[partitionNumber].labels.storage_module_size =
-            `${Number(prev[partitionNumber].labels.storage_module_size) + Number(curr.labels.storage_module_size)}`;
+          prev[partitionNumber].value=
+            `${Number(prev[partitionNumber].value) + Number(curr.value)}`;
         }
         return prev;
       },
       {},
     ),
   );
+
+  for (let key in minerRates) {
+    if (minerRates[key].hasOwnProperty('read')) {
+      totalReadRate += parseFloat(minerRates[key].read);
+    }
+    if (minerRates[key].hasOwnProperty('ideal_read')) {
+      totalIdealReadRate += parseFloat(minerRates[key].ideal_read);
+    }
+    if (minerRates[key].hasOwnProperty('hash')) {
+      totalHashRate += parseFloat(minerRates[key].hash);
+    }
+    if (minerRates[key].hasOwnProperty('ideal_hash')) {
+      totalIdealHashRate += parseFloat(minerRates[key].ideal_hash);
+    }
+  }
 
   minerMetrics = minerMetricsWithNoDuplicates.sort(
     (a, b) =>
