@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { AddMinerModal } from "./modals/AddMiner";
 import { MinerInfo } from "@/types";
 
-
 export default function Navbar() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [minerInfo, setMinerInfo] = useState<MinerInfo>();
@@ -16,13 +15,13 @@ export default function Navbar() {
 
   return (
     <header className="w-full">
-      <nav className="w-full h-14 md:h-20 top-0 left-0 z-20 border-b border-gray-300 bg-[#F1F1F1]">
-        <div className="h-full flex whitespace-nowrap items-center justify-between px-4 md:px-10">
+      <nav className="left-0 top-0 z-20 h-14 w-full border-b border-gray-300 bg-[#F1F1F1] md:h-20">
+        <div className="flex h-full items-center justify-between whitespace-nowrap px-4 md:px-10">
           <Link href="/" className="flex items-center">
             <img
               src="/assets/logo.svg"
               alt="arweave-logo"
-              className="w-8 h-8 mr-2"
+              className="mr-2 h-8 w-8"
             />
           </Link>
 
@@ -30,7 +29,7 @@ export default function Navbar() {
             <button
               onClick={() => setIsModalOpen((prevState) => !prevState)}
               disabled={!minerInfo?.hostname}
-              className="flex items-center gap-2 border border-gray-950 rounded-md px-4 py-2 font-normal outline-none text-gray-950 hover:bg-gray-150 disabled:cursor-not-allowed"
+              className="hover:bg-gray-150 flex items-center gap-2 rounded-md border border-gray-950 px-4 py-2 font-normal text-gray-950 outline-none disabled:cursor-not-allowed"
             >
               <img src="/assets/wallet.svg" alt="wallet logo" />
               <span>Add Miner</span>
@@ -38,11 +37,11 @@ export default function Navbar() {
           ) : (
             <button
               onClick={() => setIsModalOpen(true)}
-              className="hover:bg-gray-200 px-4 py-2 rounded-md text-sm sm:text-base"
+              className="rounded-md px-4 py-2 text-sm hover:bg-gray-200 sm:text-base"
             >{`${minerInfo?.hostname}:${minerInfo?.port}`}</button>
           )}
           {isModalOpen && (
-            <div className="fixed inset-0 pt-40  bg-gray-600/50 overflow-y-auto w-full">
+            <div className="fixed inset-0 w-full  overflow-y-auto bg-gray-600/50 pt-40">
               <AddMinerModal
                 storedMinerInfo={minerInfo!}
                 HandleCloseModal={setIsModalOpen}

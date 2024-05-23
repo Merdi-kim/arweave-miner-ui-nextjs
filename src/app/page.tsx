@@ -59,8 +59,13 @@ const Dashboard = () => {
           time: `${currentDate.getHours()} : ${currentDate.getMinutes()}`,
           data: {
             ...minerRates,
-            total: {totalHashRate, totalIdealHashRate, totalIdealReadRate, totalReadRate}
-          }
+            total: {
+              totalHashRate,
+              totalIdealHashRate,
+              totalIdealReadRate,
+              totalReadRate,
+            },
+          },
         };
         minerRatesOverTime = [...minerRatesOverTime, minerRateWithTimeStamp];
         setMinerMetrics(minerRatesOverTime);
@@ -92,16 +97,16 @@ const Dashboard = () => {
       {!minerInfo?.hostname && !isLoading && !isError && <NoMiner />}
       {minerInfo?.hostname && !isLoading && !isError && (
         <div>
-          <div className="w-full flex justify-center items-center h-16">
+          <div className="flex h-16 w-full items-center justify-center">
             <button
               onClick={() => setisMinerDashBoard(true)}
-              className={`px-1 mx-4 py-1 rounded ${isMinerDashBoard ? "font-medium border-b-4 border-b-gray-400" : "font-light"}`}
+              className={`mx-4 rounded px-1 py-1 ${isMinerDashBoard ? "border-b-4 border-b-gray-400 font-medium" : "font-light"}`}
             >
               Miner
             </button>
             <button
               onClick={() => setisMinerDashBoard(false)}
-              className={`px-1 mx-4 py-1 rounded ${!isMinerDashBoard ? "font-medium border-b-4 border-b-gray-400" : "font-light"}`}
+              className={`mx-4 rounded px-1 py-1 ${!isMinerDashBoard ? "border-b-4 border-b-gray-400 font-medium" : "font-light"}`}
             >
               Peers
             </button>

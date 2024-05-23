@@ -6,9 +6,7 @@ import {
 //@ts-expect-error
 import parsePrometheusTextFormat from "parse-prometheus-text-format";
 
-const fetchRawMinerMetrics = async (
-  url: string, //= "http://testnet-2.arweave.net:1984/metrics",
-) => {
+const fetchRawMinerMetrics = async (url: string) => {
   try {
     const res = await fetch(url);
     const data = await res.text();
@@ -23,20 +21,18 @@ const getMiningRateData = (data: PrometheusMetricParser[]) => {
   const miningRateData = data.find(
     (item: PrometheusMetricParser) => item.name === "mining_rate",
   );
-  let groupedMiningRateData = {} as {
+
+  const groupedMiningRateData = {} as {
     [key: string]: { [key: string]: string };
   };
 
   if (miningRateData) {
     miningRateData.metrics.forEach((item) => {
       let partition = item.labels.partition;
-      if (!groupedMiningRateData.hasOwnProperty(partition)) {
-        groupedMiningRateData[partition] = {};
-      }
-      groupedMiningRateData[partition] = {
-        ...groupedMiningRateData[partition],
-        [item.labels.type]: item.value,
-      };
+      //if (partition !== 'total') {
+        groupedMiningRateData[partition] = groupedMiningRateData[partition] || {};
+        groupedMiningRateData[partition][item.labels.type] = item.value;
+      //}
     });
   }
   return groupedMiningRateData;
@@ -54,29 +50,31 @@ const getCoordinatedMiningData = (data: PrometheusMetricParser[]) => {
   let coordinatedMiningData: { [key: string]: { [key: string]: any } } = {};
 
   resultH1?.metrics.forEach((metric) => {
+    if(metric.labels.peer !== 'total') {
     if (!coordinatedMiningData[metric.labels.peer]) {
       coordinatedMiningData[metric.labels.peer] = {};
     }
     coordinatedMiningData[metric.labels.peer] = {
       h1: {
-        from: metric.labels.direction == "from" ? metric.value : "0.0",
-        to: metric.labels.direction == "to" ? metric.value : "0.0",
+        from: metric.labels.direction == "from" ? metric.value : "0",
+        to: metric.labels.direction == "to" ? metric.value : "0",
       },
     };
-  });
+  }});
 
   resultH2?.metrics.forEach((metric) => {
+    if(metric.labels.peer !== 'total') {
     if (!coordinatedMiningData[metric.labels.peer]) {
       coordinatedMiningData[metric.labels.peer] = {};
     }
     coordinatedMiningData[metric.labels.peer] = {
       ...coordinatedMiningData[metric.labels.peer],
       h2: {
-        from: metric.labels.direction == "from" ? metric.value : "0.0",
-        to: metric.labels.direction == "to" ? metric.value : "0.0",
+        from: metric.labels.direction == "from" ? metric.value : "0",
+        to: metric.labels.direction == "to" ? metric.value : "0",
       },
     };
-  });
+  }});
   return coordinatedMiningData;
 };
 
@@ -103,10 +101,11 @@ export const fetchMetrics = async (url: string): Promise<MetricsState> => {
     dataByPacking.metrics.forEach((item) => {
       //this check will filter out unpacked data
       if (item.labels.packing !== "unpacked") {
-        const miningRatesForPartition = minerRates[item.labels.partition_number];
+        const miningRatesForPartition =
+          minerRates[item.labels.partition_number];
         item.labels = { ...item.labels, ...miningRatesForPartition };
         minerMetrics.push(item);
-        totalStorageSize += Number(item.labels.storage_module_size);
+        totalStorageSize += Number(item.value);
         totalReadRate += Number(item.labels.read);
         totalIdealReadRate += Number(item.labels.ideal_read);
         totalHashRate += Number(item.labels.hash);
@@ -123,15 +122,21 @@ export const fetchMetrics = async (url: string): Promise<MetricsState> => {
   const weaveSize = Number(weaveSizeMetric?.metrics[0].value);
   console.log("Done fetching metrics ✨");
 
-  const minerMetricsWithNoDuplicates = Object.values(minerMetrics.reduce((prev:{[key:string]:PrometheusMetrics}, curr:PrometheusMetrics) => {
-    const partitionNumber = curr.labels.partition_number;
-    if(!prev[partitionNumber]) {
-      prev[partitionNumber] = curr
-    } else {
-      prev[partitionNumber].labels.storage_module_size = `${Number(prev[partitionNumber].labels.storage_module_size) + Number(curr.labels.storage_module_size)}`
-    }
-    return prev
-  }, {}))
+  const minerMetricsWithNoDuplicates = Object.values(
+    minerMetrics.reduce(
+      (prev: { [key: string]: PrometheusMetrics }, curr: PrometheusMetrics) => {
+        const partitionNumber = curr.labels.partition_number;
+        if (!prev[partitionNumber]) {
+          prev[partitionNumber] = curr;
+        } else {
+          prev[partitionNumber].labels.storage_module_size =
+            `${Number(prev[partitionNumber].labels.storage_module_size) + Number(curr.labels.storage_module_size)}`;
+        }
+        return prev;
+      },
+      {},
+    ),
+  );
 
   minerMetrics = minerMetricsWithNoDuplicates.sort(
     (a, b) =>

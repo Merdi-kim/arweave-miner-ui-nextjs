@@ -3,7 +3,7 @@ import { fetchMetrics } from "./fetchMetrics";
 
 export async function POST(req: NextRequest) {
   const { url } = await req.json();
-  console.log(url);
+
   const {
     totalStorageSize,
     totalReadRate,

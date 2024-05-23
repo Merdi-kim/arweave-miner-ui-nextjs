@@ -1,12 +1,7 @@
 "use client";
 
 import { MinerInfo } from "@/types";
-import {
-  Dispatch,
-  FormEvent,
-  SetStateAction,
-  useState,
-} from "react";
+import { Dispatch, FormEvent, SetStateAction, useState } from "react";
 
 interface AddMinerModalProps {
   storedMinerInfo?: MinerInfo;
@@ -30,15 +25,15 @@ export const AddMinerModal = ({
   };
 
   return (
-    <div className="relative mx-auto p-7 border shadow-lg rounded-md bg-white w-10/12 sm:w-[32rem]">
+    <div className="relative mx-auto w-10/12 rounded-md border bg-white p-7 shadow-lg sm:w-[32rem]">
       <form
         onSubmit={queryMiner}
-        className="mx-auto flex flex-col items-center justify-center w-full sm:w-96"
+        className="mx-auto flex w-full flex-col items-center justify-center sm:w-96"
       >
         <div className="w-full">
           <input
             type="text"
-            className="mt-2 mb-4 px-4 py-2 w-full border rounded-md text-gray-700 focus:outline-none focus:border-green-300 invalid:border-red-500"
+            className="mb-4 mt-2 w-full rounded-md border px-4 py-2 text-gray-700 invalid:border-red-500 focus:border-green-300 focus:outline-none"
             placeholder="Enter Miner Hostname or IP address"
             value={minerInfo.hostname}
             required={!!minerInfo.port.trim().length}
@@ -50,7 +45,7 @@ export const AddMinerModal = ({
         <div className="w-full">
           <input
             type="text"
-            className="mt-2 mb-4 px-4 py-2 w-full border rounded-md text-gray-700 focus:outline-none focus:border-green-300"
+            className="mb-4 mt-2 w-full rounded-md border px-4 py-2 text-gray-700 focus:border-green-300 focus:outline-none"
             placeholder="Enter Miner Port Number"
             value={minerInfo.port}
             onChange={(e) =>
@@ -61,7 +56,7 @@ export const AddMinerModal = ({
         <div className="w-full">
           <input
             type="text"
-            className="mt-2 mb-4 px-4 py-2 w-full border rounded-md text-gray-700 focus:outline-none focus:border-green-300"
+            className="mb-4 mt-2 w-full rounded-md border px-4 py-2 text-gray-700 focus:border-green-300 focus:outline-none"
             placeholder="Enter Miner Protocol"
             value={minerInfo.protocol}
             onChange={(e) =>
@@ -72,8 +67,8 @@ export const AddMinerModal = ({
         <div>
           {HandleCloseModal && (
             <button
-            type="button"
-              className="px-4 py-2 mr-6 text-black rounded-md hover:bg-gray-100 hover:border-black border-2"
+              type="button"
+              className="mr-6 rounded-md border-2 px-4 py-2 text-black hover:border-black hover:bg-gray-100"
               onClick={() => HandleCloseModal(false)}
             >
               Close
@@ -81,7 +76,7 @@ export const AddMinerModal = ({
           )}
           <button
             type="submit"
-            className="px-4 py-2 bg-black text-white rounded-md hover:text-green-300 hover:border-green-300 border-2"
+            className="rounded-md border-2 bg-black px-4 py-2 text-white hover:border-green-300 hover:text-green-300"
           >
             Add Miner
           </button>

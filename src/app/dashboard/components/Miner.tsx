@@ -1,18 +1,12 @@
-"use client";
-
 import { PrometheusMetrics, TotalMetrics } from "@/types";
 import MetricsCard from "../components/cards/MetricsCard";
-import { Line } from "react-chartjs-2";
 import {
   Chart,
   CategoryScale,
   LinearScale,
   LineElement,
   PointElement,
-  LabelItem,
 } from "chart.js";
-import { useRecoilValue } from "recoil";
-import { metrics } from "@/store";
 import Graphs from "./cards/Graphs";
 import { ONE_TERABYTE } from "@/utils";
 
@@ -20,7 +14,6 @@ Chart.register(CategoryScale);
 Chart.register(LinearScale);
 Chart.register(PointElement);
 Chart.register(LineElement);
-//Chart.register(LabelIt);
 
 const MinerDashboard = ({
   totalMetrics,
@@ -29,19 +22,17 @@ const MinerDashboard = ({
   totalMetrics: TotalMetrics;
   metricsData: Array<PrometheusMetrics>;
 }) => {
-
   return (
     <div className="h-full w-full p-4">
-      {/*<h2 className="mb-10">Miner Output</h2>*/}
-      <div className="w-full flex flex-col items-center">
+      <div className="flex w-full flex-col items-center">
         <div className="w-full md:w-[750px] lg:w-[900px]">
-          <div className="w-full flex justify-between ">
-            <div className="text-xs sm:text-sm font-light">
+          <div className="flex w-full justify-between ">
+            <div className="text-xs font-light sm:text-sm">
               <div className="mb-2">
                 Total Storage :{" "}
                 <span className="font-bold">
                   {Number(totalMetrics.totalStorageSize / ONE_TERABYTE).toFixed(
-                    1,
+                    2,
                   )}{" "}
                   TiB
                 </span>
@@ -49,25 +40,25 @@ const MinerDashboard = ({
               <div className="mt-2">
                 Total Read Rate :{" "}
                 <span className="font-bold">
-                  {Number(totalMetrics.totalReadRate).toFixed(1)} MiB/s
+                  {Number(totalMetrics.totalReadRate).toFixed(2)} MiB/s
                 </span>
               </div>
               <div className="mt-2">
                 Total Hash Rate :{" "}
                 <span className="font-bold">
-                  {Number(totalMetrics.totalHashRate).toFixed(1)} h/s
+                  {Number(totalMetrics.totalHashRate).toFixed(2)} h/s
                 </span>
               </div>
               <div className="mt-2">
                 Total Ideal Read Rate :{" "}
                 <span className="font-bold">
-                  {Number(totalMetrics.totalIdealReadRate).toFixed(1)} MiB/s
+                  {Number(totalMetrics.totalIdealReadRate).toFixed(2)} MiB/s
                 </span>
               </div>
               <div className="mt-2">
                 Total Ideal Hash Rate :{" "}
                 <span className="font-bold">
-                  {Number(totalMetrics.totalIdealHashRate).toFixed(1)} h/s
+                  {Number(totalMetrics.totalIdealHashRate).toFixed(2)} h/s
                 </span>
               </div>
               <div className="mt-2">
@@ -77,7 +68,7 @@ const MinerDashboard = ({
                     (Number(totalMetrics.totalReadRate) /
                       Number(totalMetrics.totalIdealReadRate)) *
                       100,
-                  ).toFixed(1)}{" "}
+                  ).toFixed(2)}{" "}
                   %
                 </span>
               </div>
@@ -88,7 +79,7 @@ const MinerDashboard = ({
                     (Number(totalMetrics.totalHashRate) /
                       Number(totalMetrics.totalIdealHashRate)) *
                       100,
-                  ).toFixed(1)}{" "}
+                  ).toFixed(2)}{" "}
                   %
                 </span>
               </div>
@@ -97,7 +88,7 @@ const MinerDashboard = ({
               <a
                 href="https://docs.arweave.org/developers/mining/mining-guide"
                 target="_blank"
-                className="font-bold cursor-pointer"
+                className="cursor-pointer font-bold"
               >
                 <img
                   src="/assets/help.svg"
@@ -107,11 +98,11 @@ const MinerDashboard = ({
               </a>
             </div>
           </div>
-          <details className="mb-4 py-2 group open:border-[1px] open:border-slate-400 open:mt-4 rounded-md">
-            <summary className="hover:font-bold cursor-pointer group-open:px-4">
+          <details className="group mb-4 rounded-md py-2 open:mt-4 open:border-[1px] open:border-slate-400">
+            <summary className="cursor-pointer hover:font-bold group-open:px-4">
               More details
             </summary>
-            <div className="py-5 my-5 flex flex-col items-center">
+            <div className="my-5 flex flex-col items-center py-5">
               <Graphs />
             </div>
           </details>

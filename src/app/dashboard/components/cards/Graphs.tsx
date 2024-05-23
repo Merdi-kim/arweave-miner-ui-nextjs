@@ -22,22 +22,24 @@ interface GraphsProps {
   metric?: PrometheusMetrics;
 }
 
+type Rates = { labels: Array<string>; data: Array<string> };
+
 const Graphs = ({ metric }: GraphsProps) => {
   const metricsData = useRecoilValue(metrics);
 
-  let readRate: { labels: Array<string>; data: Array<string> } = {
+  let readRate: Rates = {
     labels: [],
     data: [],
   };
-  let hashRate: { labels: Array<string>; data: Array<string> } = {
+  let hashRate: Rates = {
     labels: [],
     data: [],
   };
-  let idealReadRate: { labels: Array<string>; data: Array<string> } = {
+  let idealReadRate: Rates = {
     labels: [],
     data: [],
   };
-  let idealHashRate: { labels: Array<string>; data: Array<string> } = {
+  let idealHashRate: Rates = {
     labels: [],
     data: [],
   };
@@ -66,11 +68,11 @@ const Graphs = ({ metric }: GraphsProps) => {
   const avgReadRate = Number(
     readRate.data.reduce((a, b) => Number(a) + Number(b), 0) /
       Number(readRate.data.length),
-  ).toFixed(1);
+  ).toFixed(2);
   const avgHashRate = Number(
     hashRate.data.reduce((a, b) => Number(a) + Number(b), 0) /
       Number(hashRate.data.length),
-  ).toFixed(1);
+  ).toFixed(2);
 
   const readData = {
     labels: readRate.labels,
@@ -113,7 +115,7 @@ const Graphs = ({ metric }: GraphsProps) => {
   };
 
   return (
-    <div className="w-[11/12] relative mx-auto p-7 sm:w-full">
+    <div className="relative mx-auto w-[11/12] p-7 sm:w-full">
       <div className="flex flex-col  items-center">
         <div>
           Average Read Rate:{" "}
@@ -125,23 +127,15 @@ const Graphs = ({ metric }: GraphsProps) => {
         </div>
       </div>
 
-      <div className="py-5 my-5 hidden sm:flex flex-col items-center">
+      <div className="my-5 hidden flex-col items-center py-5 sm:flex">
         <div className="">
           <h4>Read Rate</h4>
-          <Line
-            className="h-[200px] w-full"
-            width={600}
-            data={readData}
-          />
+          <Line className="h-[200px] w-full" width={600} data={readData} />
         </div>
 
         <div className="mt-10">
           <h4>Hash Rate</h4>
-          <Line
-            className="h-[200px] w-full"
-            width={600}
-            data={hashData}
-          />
+          <Line className="h-[200px] w-full" width={600} data={hashData} />
         </div>
       </div>
     </div>

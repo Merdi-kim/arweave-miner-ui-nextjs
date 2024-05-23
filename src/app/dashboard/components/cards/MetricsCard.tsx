@@ -1,21 +1,13 @@
-"use client";
-
 import { PrometheusMetrics } from "@/types";
-import { useState } from "react";
 import Graphs from "./Graphs";
 import { ONE_TERABYTE } from "@/utils";
 
 const MetricsCard = ({ metric }: { metric: PrometheusMetrics }) => {
   const MODULE_MAX_SIZE = 3.6 * ONE_TERABYTE;
 
-  const [showMetricsWithChart, setShowMetricsWithChart] = useState(false);
-
   return (
-    <div
-      onClick={() => setShowMetricsWithChart(true)}
-      className="w-full  md:w-[750px] lg:w-[900px] border-[1px] border-gray-300 my-2 py-2 px-5 rounded-md hover:cursor-pointer transition-all hover:border-black font-light text-xs sm:text-sm"
-    >
-      <div className="flex justify-between items-start">
+    <div className="my-2  w-full rounded-md border-[1px] border-gray-300 px-5 py-2 text-xs font-light transition-all hover:cursor-pointer hover:border-black sm:text-sm md:w-[750px] lg:w-[900px]">
+      <div className="flex items-start justify-between">
         <div>
           Partition{" "}
           <span className="font-semibold">
@@ -26,8 +18,8 @@ const MetricsCard = ({ metric }: { metric: PrometheusMetrics }) => {
           <span>Data Size</span>
           <span className="font-semibold">
             {Number(
-              Number(metric.labels.storage_module_size) / ONE_TERABYTE,
-            ).toFixed(1)}{" "}
+              Number(metric.value) / ONE_TERABYTE,
+            ).toFixed(2)}{" "}
             TiB
           </span>
         </div>
@@ -35,28 +27,28 @@ const MetricsCard = ({ metric }: { metric: PrometheusMetrics }) => {
           <span>% of Max</span>
           <span className="font-semibold">
             {(
-              (Number(metric.labels.storage_module_size) / MODULE_MAX_SIZE) *
+              (Number(metric.value) / MODULE_MAX_SIZE) *
               100
-            ).toFixed(1)}{" "}
+            ).toFixed(2)}{" "}
             %
           </span>
         </div>
       </div>
 
-      <div className="flex justify-between items-start mt-6">
+      <div className="mt-6 flex items-start justify-between">
         <div>
-          <h4 className="text-sm sm:text-base mb-1">Read Information</h4>
+          <h4 className="mb-1 text-sm sm:text-base">Read Information</h4>
           <div>
             <div>
               Current:{" "}
               <span className="font-semibold">
-                {Number(metric.labels.read).toFixed(1)} MiB/s
+                {Number(metric.labels.read).toFixed(2)} MiB/s
               </span>
             </div>
             <div>
               Ideal:{" "}
               <span className="font-semibold">
-                {Number(metric.labels.ideal_read).toFixed(1)} MiB/s
+                {Number(metric.labels.ideal_read).toFixed(2)} MiB/s
               </span>
             </div>
             <div>
@@ -66,25 +58,25 @@ const MetricsCard = ({ metric }: { metric: PrometheusMetrics }) => {
                   (Number(metric.labels.read) /
                     Number(metric.labels.ideal_read)) *
                     100,
-                ).toFixed(1)}{" "}
+                ).toFixed(2)}{" "}
                 %
               </span>
             </div>
           </div>
         </div>
         <div>
-          <h4 className="text-sm sm:text-base mb-1">Hash Information</h4>
+          <h4 className="mb-1 text-sm sm:text-base">Hash Information</h4>
           <div>
             <div>
               Current:{" "}
               <span className="font-semibold">
-                {Number(metric.labels.hash).toFixed(1)} h/s
+                {Number(metric.labels.hash).toFixed(2)} h/s
               </span>
             </div>
             <div>
               Ideal:{" "}
               <span className="font-semibold">
-                {Number(metric.labels.ideal_hash).toFixed(1)} h/s
+                {Number(metric.labels.ideal_hash).toFixed(2)} h/s
               </span>
             </div>
             <div>
@@ -94,7 +86,7 @@ const MetricsCard = ({ metric }: { metric: PrometheusMetrics }) => {
                   (Number(metric.labels.hash) /
                     Number(metric.labels.ideal_hash)) *
                     100,
-                ).toFixed(1)}{" "}
+                ).toFixed(2)}{" "}
                 %
               </span>
             </div>
@@ -102,7 +94,7 @@ const MetricsCard = ({ metric }: { metric: PrometheusMetrics }) => {
         </div>
       </div>
       <details className="mt-4">
-        <summary className="w-full text-center px-3 hover:font-semibold">
+        <summary className="w-full px-3 text-center hover:font-semibold">
           More Details
         </summary>
         <Graphs metric={metric} />

@@ -11,105 +11,86 @@ const CoordinatedMiningDashBoard = () => {
 
   return (
     <div className="w-full">
-      <div className="w-full flex flex-col items-center font-light text-xs sm:text-sm px-2">
+      <div className="flex w-full flex-col items-center px-2 text-xs font-light sm:text-sm">
+        {/*<div className="my-3 w-full border-b-2 border-b-gray-300 px-1 py-3 sm:w-[600px] md:w-[700px]">
+          <div className="text-center text-sm sm:text-base">
+            <span className="font-semibold">TOTAL</span>
+          </div>
+          <div className="mt-5 flex justify-between">
+            <div>
+              Out Batch: <span className="font-semibold">00 h/s</span>
+            </div>
+            <div>
+              In Batch: <span className="font-semibold">00 h/s</span>
+            </div>
+          </div>
+  </div>*/}
         {Object.keys(coordinatedMiningMetricsValue).length > 0 ? (
           Object.keys(coordinatedMiningMetricsValue).map((key: string) => (
-            <div key={key} className="w-full flex flex-col items-center">
-              {key == "total" ? (
-                <div className="w-full sm:w-[600px] md:w-[700px] py-3 px-1 border-b-2 border-b-gray-300 my-3">
-                  <div className="text-center text-sm sm:text-base">
-                    <span className="font-semibold">{key.toUpperCase()}</span>
+            <div
+              key={key}
+              className="my-3 w-full border-b-2 border-b-gray-300 px-1 py-3 sm:w-[600px] md:w-[700px]"
+            >
+              <div className="text-center text-sm sm:text-base">
+                Peer <span className="font-semibold">{key}</span>
+              </div>
+              <div className="mt-5 flex justify-between">
+                <div>
+                  <div>
+                    H1 Out:{" "}
+                    <span className="font-semibold">
+                      {Number(
+                        /*@ts-ignore*/
+                        coordinatedMiningMetricsValue[key].h1.to,
+                      ).toFixed(2)}{" "}
+                      h/s
+                    </span>
                   </div>
-                  <div className="flex justify-between mt-5">
-                    <div>
-                      Out Batch:{" "}
-                      <span className="font-semibold">
-                        {Number(
-                          /* @ts-ignore */
-                          coordinatedMiningMetricsValue[key].h1.from,
-                        ).toFixed(1)}{" "}
-                        h/s
-                      </span>
-                    </div>
-                    <div>
-                      In Batch:{" "}
-                      <span className="font-semibold">
-                        {Number(
-                          /* @ts-ignore */
-                          coordinatedMiningMetricsValue[key].h1.to,
-                        ).toFixed(1)}{" "}
-                        h/s
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              ) : (
-                <div
-                  key={key}
-                  className="w-full sm:w-[600px] md:w-[700px] py-3 px-1 border-b-2 border-b-gray-300 my-3"
-                >
-                  <div className="text-center text-sm sm:text-base">
-                    Peer <span className="font-semibold">{key}</span>
-                  </div>
-                  <div className="flex justify-between mt-5">
-                    <div>
-                      <div>
-                        H1 Out:{" "}
-                        <span className="font-semibold">
-                          {Number(
-                            /*@ts-ignore*/
-                            coordinatedMiningMetricsValue[key].h1.to,
-                          ).toFixed(1)}{" "}
-                          h/s
-                        </span>
-                      </div>
-                      <div>
-                        H1 In:{" "}
-                        <span className="font-semibold">
-                          {Number(
-                            /*@ts-ignore*/
-                            coordinatedMiningMetricsValue[key].h1.from,
-                          ).toFixed(1)}{" "}
-                          h/s
-                        </span>
-                      </div>
-                    </div>
-                    <div>
-                      <div>
-                        H2 Out:{" "}
-                        <span className="font-semibold">
-                          {Number(
-                            //@ts-ignore
-                            coordinatedMiningMetricsValue[key].h2.to,
-                          ).toFixed(1)}{" "}
-                          h/s
-                        </span>
-                      </div>
-                      <div>
-                        H2 In:{" "}
-                        <span className="font-semibold">
-                          {Number(
-                            //@ts-ignore
-                            coordinatedMiningMetricsValue[key].h2.from,
-                          ).toFixed(1)}{" "}
-                          h/s
-                        </span>
-                      </div>
-                    </div>
+                  <div>
+                    H1 In:{" "}
+                    <span className="font-semibold">
+                      {Number(
+                        /*@ts-ignore*/
+                        coordinatedMiningMetricsValue[key].h1.from,
+                      ).toFixed(2)}{" "}
+                      h/s
+                    </span>
                   </div>
                 </div>
-              )}
+                <div>
+                  <div>
+                    H2 Out:{" "}
+                    <span className="font-semibold">
+                      {Number(
+                        //@ts-ignore
+                        coordinatedMiningMetricsValue[key].h2.to,
+                      ).toFixed(2)}{" "}
+                      h/s
+                    </span>
+                  </div>
+                  <div>
+                    H2 In:{" "}
+                    <span className="font-semibold">
+                      {Number(
+                        //@ts-ignore
+                        coordinatedMiningMetricsValue[key].h2.from,
+                      ).toFixed(2)}{" "}
+                      h/s
+                    </span>
+                  </div>
+                </div>
+              </div>
             </div>
           ))
         ) : (
-          <div className="h-[70vh] w-full flex items-center justify-center">
-            <div className="h-60 flex flex-col items-center">
+          <div className="flex h-[70vh] w-full items-center justify-center">
+            <div className="flex h-60 flex-col items-center">
               <img
                 src="/assets/logo.svg"
                 alt="arweave logo"
-                className="h-20 mb-4"
+                className="mb-4 h-20"
               />
-              <p className="text-base sm:text-lg font-semibold">
+              <p className="text-base font-semibold sm:text-lg">
                 <i>This node has no peers</i>
               </p>
             </div>
