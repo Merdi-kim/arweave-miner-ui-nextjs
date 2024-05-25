@@ -64,9 +64,12 @@ const MinerDashboard = ({
               <div className="mt-2">
                 % of Ideal Read Rate:{" "}
                 <span className="font-semibold">
-                  {Number( totalMetrics.totalIdealReadRate > 0 ?
-                    (Number(totalMetrics.totalReadRate) /
-                      Number(totalMetrics.totalIdealReadRate)) * 100 : 0
+                  {Number(
+                    totalMetrics.totalIdealReadRate > 0
+                      ? (Number(totalMetrics.totalReadRate) /
+                          Number(totalMetrics.totalIdealReadRate)) *
+                          100
+                      : 0,
                   ).toFixed(2)}{" "}
                   %
                 </span>
@@ -75,10 +78,11 @@ const MinerDashboard = ({
                 % of Ideal Hash Rate:{" "}
                 <span className="font-semibold">
                   {Number(
-                    totalMetrics.totalIdealHashRate > 0 ?
-                    (Number(totalMetrics.totalHashRate) /
-                      Number(totalMetrics.totalIdealHashRate)) *
-                      100 : 0
+                    totalMetrics.totalIdealHashRate > 0
+                      ? (Number(totalMetrics.totalHashRate) /
+                          Number(totalMetrics.totalIdealHashRate)) *
+                          100
+                      : 0,
                   ).toFixed(2)}{" "}
                   %
                 </span>

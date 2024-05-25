@@ -65,7 +65,6 @@ const CoordinatedMiningDashBoard = () => {
                         //@ts-ignore
                         coordinatedMiningMetricsValue[key].h2.to,
                       ).toFixed(2)}{" "}
-                      h/s
                     </span>
                   </div>
                   <div>
@@ -75,7 +74,6 @@ const CoordinatedMiningDashBoard = () => {
                         //@ts-ignore
                         coordinatedMiningMetricsValue[key].h2.from,
                       ).toFixed(2)}{" "}
-                      h/s
                     </span>
                   </div>
                 </div>

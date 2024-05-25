@@ -29,8 +29,9 @@ const getMiningRateData = (data: PrometheusMetricParser[]) => {
   if (miningRateData) {
     miningRateData.metrics.forEach((item) => {
       let partition = item.labels.partition;
-      if (partition !== 'total') {
-        groupedMiningRateData[partition] = groupedMiningRateData[partition] || {};
+      if (partition !== "total") {
+        groupedMiningRateData[partition] =
+          groupedMiningRateData[partition] || {};
         groupedMiningRateData[partition][item.labels.type] = item.value;
       }
     });
@@ -47,34 +48,35 @@ const getCoordinatedMiningData = (data: PrometheusMetricParser[]) => {
     (item: PrometheusMetricParser) => item.name === "cm_h2_count",
   );
 
-  let coordinatedMiningData: { [key: string]: { [key: string]: any } } = {};
+  let coordinatedMiningData: { [key: string]: {h1:{from:string, to:string}, h2:{from:string, to:string}}} = {};
 
   resultH1?.metrics.forEach((metric) => {
-    if(metric.labels.peer !== 'total') {
-    if (!coordinatedMiningData[metric.labels.peer]) {
-      coordinatedMiningData[metric.labels.peer] = {};
+    if (metric.labels.peer !== "total") {
+      coordinatedMiningData[metric.labels.peer] =
+        coordinatedMiningData[metric.labels.peer] || {h1:{from:'0', to:'0'}, h2:{from:'0', to:'0'}};
+
+      if(metric.labels.direction == "from") {
+        coordinatedMiningData[metric.labels.peer].h1.from = metric.value
+      }
+      if(metric.labels.direction == "to") {
+        coordinatedMiningData[metric.labels.peer].h1.to = metric.value
+      }
     }
-    coordinatedMiningData[metric.labels.peer] = {
-      h1: {
-        from: metric.labels.direction == "from" ? metric.value : "0",
-        to: metric.labels.direction == "to" ? metric.value : "0",
-      },
-    };
-  }});
+  });
 
   resultH2?.metrics.forEach((metric) => {
-    if(metric.labels.peer !== 'total') {
-    if (!coordinatedMiningData[metric.labels.peer]) {
-      coordinatedMiningData[metric.labels.peer] = {};
+    if (metric.labels.peer !== "total") {
+      coordinatedMiningData[metric.labels.peer] =
+        coordinatedMiningData[metric.labels.peer] || {h1:{from:'0', to:'0'}, h2:{from:'0', to:'0'}};
+
+      if(metric.labels.direction == "from") {
+        coordinatedMiningData[metric.labels.peer].h2.from = metric.value
+      }
+      if(metric.labels.direction == "to") {
+        coordinatedMiningData[metric.labels.peer].h2.to = metric.value
+      }
     }
-    coordinatedMiningData[metric.labels.peer] = {
-      ...coordinatedMiningData[metric.labels.peer],
-      h2: {
-        from: metric.labels.direction == "from" ? metric.value : "0",
-        to: metric.labels.direction == "to" ? metric.value : "0",
-      },
-    };
-  }});
+  });
   return coordinatedMiningData;
 };
 
@@ -125,7 +127,7 @@ export const fetchMetrics = async (url: string): Promise<MetricsState> => {
         if (!prev[partitionNumber]) {
           prev[partitionNumber] = curr;
         } else {
-          prev[partitionNumber].value=
+          prev[partitionNumber].value =
             `${Number(prev[partitionNumber].value) + Number(curr.value)}`;
         }
         return prev;
@@ -135,16 +137,16 @@ export const fetchMetrics = async (url: string): Promise<MetricsState> => {
   );
 
   for (let key in minerRates) {
-    if (minerRates[key].hasOwnProperty('read')) {
+    if (minerRates[key].hasOwnProperty("read")) {
       totalReadRate += parseFloat(minerRates[key].read);
     }
-    if (minerRates[key].hasOwnProperty('ideal_read')) {
+    if (minerRates[key].hasOwnProperty("ideal_read")) {
       totalIdealReadRate += parseFloat(minerRates[key].ideal_read);
     }
-    if (minerRates[key].hasOwnProperty('hash')) {
+    if (minerRates[key].hasOwnProperty("hash")) {
       totalHashRate += parseFloat(minerRates[key].hash);
     }
-    if (minerRates[key].hasOwnProperty('ideal_hash')) {
+    if (minerRates[key].hasOwnProperty("ideal_hash")) {
       totalIdealHashRate += parseFloat(minerRates[key].ideal_hash);
     }
   }
