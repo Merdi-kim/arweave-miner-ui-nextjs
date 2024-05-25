@@ -7,13 +7,19 @@ import {
 import parsePrometheusTextFormat from "parse-prometheus-text-format";
 
 const fetchRawMinerMetrics = async (url: string) => {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 480000);
   try {
-    const res = await fetch(url);
+    const res = await fetch(url, {
+      signal: controller.signal
+    });
     const data = await res.text();
     return data;
   } catch (err) {
     console.log(err);
     throw new Error("Something went wrong while fetching miner's metrics");
+  }finally {
+    clearTimeout(timeoutId);
   }
 };
 
