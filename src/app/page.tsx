@@ -89,7 +89,7 @@ const Dashboard = () => {
     if (!storedMinerInfo?.hostname) return setIsLoading(false);
 
     getData();
-    setInterval(() => getData(), 180000);
+    setInterval(() => getData(), 30000);
   }, []);
 
   return (

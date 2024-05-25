@@ -1,1 +1,1 @@
-export const ONE_TERABYTE = 1024000000000;
+export const ONE_TERABYTE = 1099511627776;

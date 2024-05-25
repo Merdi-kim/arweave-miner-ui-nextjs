@@ -54,10 +54,10 @@ const MetricsCard = ({ metric }: { metric: PrometheusMetrics }) => {
             <div>
               % of Ideal:{" "}
               <span className="font-semibold">
-                {Number(
+                {Number(+metric.labels.ideal_read > 0 ?
                   (Number(metric.labels.read) /
                     Number(metric.labels.ideal_read)) *
-                    100,
+                    100 : 0
                 ).toFixed(2)}{" "}
                 %
               </span>
@@ -82,10 +82,10 @@ const MetricsCard = ({ metric }: { metric: PrometheusMetrics }) => {
             <div>
               % of Ideal:{" "}
               <span className="font-semibold">
-                {Number(
+                {Number(+metric.labels.ideal_hash > 0 ?
                   (Number(metric.labels.hash) /
                     Number(metric.labels.ideal_hash)) *
-                    100,
+                    100 : 0
                 ).toFixed(2)}{" "}
                 %
               </span>
