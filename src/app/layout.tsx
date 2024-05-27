@@ -16,10 +16,12 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <title>Arweave Miner Metrics</title>
+        <link rel="icon" href="/assets/favicon.ico" sizes="any" />
         <meta
           name="description"
           content="Dashboard for displaying important Arweave miner metrics"
         />
+        
       </head>
       <body suppressHydrationWarning className={roboto.className}>
         <Navbar />
