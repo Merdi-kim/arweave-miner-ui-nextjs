@@ -9,12 +9,13 @@ import { coordinatedMiningMetrics, metrics } from "@/store";
 import MinerDashboardLoading from "./dashboard/components/Loadings/MinerDashboard";
 import NoMiner from "./dashboard/components/NoMiner";
 import Error from "./dashboard/components/Error";
+import { fetchMetrics } from "@/utils/fetchMetrics";
 
 const Dashboard = () => {
   const [isMinerDashBoard, setisMinerDashBoard] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
-  const [metricsData, setMetricsData] = useState<Array<PrometheusMetrics>>([]);
+  const [metricsData, setMetricsData] = useState<Array<PrometheusMetrics> | undefined>([]);
   const [totalMetrics, setTotalMetrics] = useState<TotalMetrics>({
     totalStorageSize: 0,
     totalReadRate: 0,
@@ -34,15 +35,9 @@ const Dashboard = () => {
     const localStorageData = localStorage.getItem("minerInfo");
     const storedMinerInfo = JSON.parse(localStorageData!);
     setMinerInfo(storedMinerInfo);
+    const url = `${storedMinerInfo.protocol}://${storedMinerInfo.hostname}:${storedMinerInfo.port}/metrics`
     const getData = async () => {
       try {
-        const data = await fetch("/api", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            url: `${storedMinerInfo.protocol}://${storedMinerInfo.hostname}:${storedMinerInfo.port}/metrics`,
-          }),
-        });
         const {
           totalStorageSize,
           totalReadRate,
@@ -53,7 +48,7 @@ const Dashboard = () => {
           weaveSize,
           minerMetrics: metricsDataFromApi,
           coordinatedMiningData,
-        } = await data.json();
+        } = await fetchMetrics(url);
         const currentDate = new Date();
         const minerRateWithTimeStamp = {
           time: `${currentDate.getHours()} : ${currentDate.getMinutes()}`,
@@ -115,7 +110,7 @@ const Dashboard = () => {
           <div>
             {isMinerDashBoard ? (
               <MinerDashboard
-                metricsData={metricsData}
+                metricsData={metricsData!}
                 totalMetrics={totalMetrics}
               />
             ) : (
