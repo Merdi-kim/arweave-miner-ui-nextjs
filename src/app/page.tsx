@@ -34,6 +34,7 @@ const Dashboard = () => {
   useEffect(() => {
     const localStorageData = localStorage.getItem("minerInfo");
     const storedMinerInfo = JSON.parse(localStorageData!);
+    if (!storedMinerInfo?.hostname) return setIsLoading(false);
     setMinerInfo(storedMinerInfo);
     const url = `${storedMinerInfo.protocol}://${storedMinerInfo.hostname}:${storedMinerInfo.port}/metrics`
     const getData = async () => {
@@ -80,8 +81,6 @@ const Dashboard = () => {
         setIsError(true);
       }
     };
-
-    if (!storedMinerInfo?.hostname) return setIsLoading(false);
 
     getData();
     setInterval(() => getData(), 30000);
